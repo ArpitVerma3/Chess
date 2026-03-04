@@ -1,0 +1,22 @@
+body{
+    background-color: #302e2b;
+}
+#root{
+    display: flex;
+    
+    width: fit-content;
+    margin: auto;
+}
+.sqrRow{
+    display: flex;
+}
+.square{
+    width: 70px;
+    height: 70px;
+}
+.white{
+    background-color: #F0D9B5;
+}
+.black{
+    background-color: #B58863;
+}
