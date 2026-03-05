@@ -3,7 +3,7 @@ body{
 }
 #root{
     display: flex;
-    
+    flex-direction: column;
     width: fit-content;
     margin: auto;
 }
@@ -19,4 +19,7 @@ body{
 }
 .black{
     background-color: #B58863;
+}
+.piece{
+    width: 100%;
 }

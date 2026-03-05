@@ -1,16 +1,13 @@
-export function Greet(){
-    alert("Hello World");
-}
 function square(color,id,piece){
     return{color,id,piece};
 }
 function sqrRow(rowId){
     const Rows=[];
-    const abcd=["a","b","c","d","e","f","g","h"];
+    const Cols=["a","b","c","d","e","f","g","h"];
 
     if(rowId % 2==0){
     
-        abcd.forEach((element,index)=>{
+        Cols.forEach((element,index)=>{
             if(index % 2==0){
                 Rows.push(square("white",element+rowId,null));
             }else{
@@ -19,7 +16,7 @@ function sqrRow(rowId){
         });
     }
     else{
-         abcd.forEach((element,index)=>{
+         Cols.forEach((element,index)=>{
             if(index % 2==0){
                 Rows.push(square("black",element+rowId,null));
             }else{
