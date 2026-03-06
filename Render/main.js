@@ -1,9 +1,6 @@
-// import { blackPawn } from "../Data/pieces.js";
-
 import * as pieces from "../Data/pieces.js";
-console.log(pieces);
-
-const ROOT_DIV=document.getElementById("root");
+import { ROOT_DIV } from "../Helper/constants.js";
+import { globalData } from "../index.js";
 
 function pieceRender(data){
 
@@ -30,7 +27,6 @@ function initGameRender(data){
 
         element.forEach(square => {
             const squareDiv=document.createElement("div");
-            console.log(square);
             
             squareDiv.classList.add("square");
             squareDiv.classList.add(square.color);
@@ -96,4 +92,21 @@ function initGameRender(data){
     pieceRender(data);
 } 
 
-export{initGameRender};
+function renderHighlight(squareId){
+    const highlightSpan=document.createElement("span");
+    highlightSpan.classList.add("highlight");
+
+    document.getElementById(squareId).appendChild(highlightSpan);
+}
+function clearHighlight(){
+    globalData.forEach((row) => {
+        row.forEach((element) => {
+
+            if(element.id==highlight){
+                element.highlight=true;
+            }
+        });
+    });
+}
+
+export{initGameRender,renderHighlight};
