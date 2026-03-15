@@ -3,6 +3,7 @@ import { globalData } from "../index.js";
 import { renderHighlight } from "../Render/main.js";
 import { highlight_state } from "../Helper/constants.js";
 
+let highlight_state=false;
 function whitePawnClicked({piece}){
     const curr_posi=piece.curr_pos;
 

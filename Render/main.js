@@ -102,7 +102,7 @@ function clearHighlight(){
     globalData.forEach((row) => {
         row.forEach((element) => {
 
-            if(element.id==highlight){
+            if(element.id==row){
                 element.highlight=true;
             }
         });
