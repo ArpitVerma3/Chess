@@ -92,21 +92,18 @@ function initGameRender(data){
     pieceRender(data);
 } 
 
+function clearHighlight(){
+    document.querySelectorAll(".highlight").forEach((el) => el.remove());
+}
+
 function renderHighlight(squareId){
-    const highlightSpan=document.createElement("span");
+    const squareEl = document.getElementById(squareId);
+    if (!squareEl) return;
+
+    const highlightSpan = document.createElement("span");
     highlightSpan.classList.add("highlight");
 
-    document.getElementById(squareId).appendChild(highlightSpan);
-}
-function clearHighlight(){
-    globalData.forEach((row) => {
-        row.forEach((element) => {
-
-            if(element.id==row){
-                element.highlight=true;
-            }
-        });
-    });
+    squareEl.appendChild(highlightSpan);
 }
 
-export{initGameRender,renderHighlight};
+export { initGameRender, renderHighlight, clearHighlight };

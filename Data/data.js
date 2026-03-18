@@ -1,5 +1,12 @@
+import { renderHighlight } from "../Render/main.js";
+
 function square(color,id,piece){
-    return{color,id,piece};
+
+    const highlightSqr=function(){
+        renderHighlight(this.id);
+        this.highlightSqr=true;
+    };
+    return{color,id,piece,highlightSqr};
 }
 function sqrRow(rowId){
     const Rows=[];

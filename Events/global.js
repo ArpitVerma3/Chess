@@ -1,9 +1,8 @@
 import { ROOT_DIV } from "../Helper/constants.js";
 import { globalData } from "../index.js";
 import { renderHighlight } from "../Render/main.js";
-import { highlight_state } from "../Helper/constants.js";
+import { clearHighlight } from "../Render/main.js";
 
-let highlight_state=false;
 function whitePawnClicked({piece}){
     const curr_posi=piece.curr_pos;
 
@@ -12,22 +11,20 @@ function whitePawnClicked({piece}){
             `${curr_posi[0]}${Number(curr_posi[1]) + 1}`,
             `${curr_posi[0]}${Number(curr_posi[1]) + 2}`,
         ];
+        clearHighlight();
+
         hltsSqrIds.forEach((highlight) => {
 
             globalData.forEach((row) => {
                 row.forEach((element) => {
 
                     if(element.id==highlight){
-                        element.highlight=true;
+                        element.highlightSqr(true);
                     }
                 });
             });
-            if(highlight_state)clearHighlight();
-            renderHighlight(highlight);
-            highlight_state=true;
         });
     }
-    console.log(globalData);  
 }
 function GlobalEvent(){
     ROOT_DIV.addEventListener("click",function(event){
