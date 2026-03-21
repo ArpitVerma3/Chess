@@ -2,8 +2,25 @@ import { ROOT_DIV } from "../Helper/constants.js";
 import { globalData } from "../index.js";
 import { renderHighlight } from "../Render/main.js";
 import { clearHighlight } from "../Render/main.js";
+import { selfhlts,clearPrevSelfHlt } from "../Render/main.js";
+
+let selfhighlight=null;
+//move state
+let moveState=null;
 
 function whitePawnClicked({piece}){
+    if (selfhighlight === piece) {
+        clearHighlight();
+        return;
+    }
+    clearPrevSelfHlt(selfhighlight);
+    clearHighlight();
+    selfhlts(piece);
+
+    selfhighlight=piece;
+
+    moveState=piece;
+
     const curr_posi=piece.curr_pos;
 
     if(curr_posi[1]=="2"){
@@ -11,7 +28,6 @@ function whitePawnClicked({piece}){
             `${curr_posi[0]}${Number(curr_posi[1]) + 1}`,
             `${curr_posi[0]}${Number(curr_posi[1]) + 2}`,
         ];
-        clearHighlight();
 
         hltsSqrIds.forEach((highlight) => {
 
@@ -37,7 +53,8 @@ function GlobalEvent(){
 
             if(square.piece.piece_name==="White_Pawn"){
                 whitePawnClicked(square);
-            }
+            }      
+        }else{
             
         }
     })

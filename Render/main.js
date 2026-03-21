@@ -2,6 +2,16 @@ import * as pieces from "../Data/pieces.js";
 import { ROOT_DIV } from "../Helper/constants.js";
 import { globalData } from "../index.js";
 
+function selfhlts(piece){
+    document.getElementById(piece.curr_pos)
+    .classList.add("hltYlow");
+}
+function clearPrevSelfHlt(piece){
+    if(piece){
+    document.getElementById(piece.curr_pos)
+    .classList.remove("hltYlow");
+    }
+}
 function pieceRender(data){
 
     data.forEach(row => {
@@ -106,4 +116,4 @@ function renderHighlight(squareId){
     squareEl.appendChild(highlightSpan);
 }
 
-export { initGameRender, renderHighlight, clearHighlight };
+export { initGameRender,clearPrevSelfHlt, renderHighlight, clearHighlight ,selfhlts};
