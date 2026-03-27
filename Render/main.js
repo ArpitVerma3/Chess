@@ -2,6 +2,35 @@ import * as pieces from "../Data/pieces.js";
 import { ROOT_DIV } from "../Helper/constants.js";
 import { globalData } from "../index.js";
 
+function moveElement(piece,id){
+    const oldPos=piece.curr_pos;
+    piece.curr_pos=id;
+    const flatData=globalData.flat();
+
+    flatData.forEach((el)=>{
+        if(el.id==oldPos){
+            delete el.piece;
+        }
+        if(el.id==id){
+            el.piece=piece;
+        }
+    });
+    clearHighlight();
+
+    const prev_piece=document.getElementById(oldPos);
+    const curr_piece=document.getElementById(id);
+
+    prev_piece.classList.remove("hltYlow");
+
+    curr_piece.innerHTML=prev_piece.innerHTML;
+    prev_piece.innerHTML="";
+
+    console.log(prev_piece);
+    console.log(curr_piece);
+    
+    piece.curr_pos=id;
+}
+
 function selfhlts(piece){
     document.getElementById(piece.curr_pos)
     .classList.add("hltYlow");
@@ -116,4 +145,7 @@ function renderHighlight(squareId){
     squareEl.appendChild(highlightSpan);
 }
 
-export { initGameRender,clearPrevSelfHlt, renderHighlight, clearHighlight ,selfhlts};
+export { initGameRender,moveElement,
+    clearPrevSelfHlt, renderHighlight,
+     clearHighlight ,selfhlts
+};

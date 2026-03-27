@@ -35,10 +35,10 @@ body{
     
     transform: translate(-50%, -50%);
     border-radius: 50%;
-    background-color: #F5A623;
+    background-color: #4A90E2;
     pointer-events: none;
     box-shadow: 0 0 6px rgba(0,0,0,0.3);
 }
 .hltYlow{
-    background-color: #4A90E2;
+    background-color: #F5A623;
 }

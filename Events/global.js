@@ -1,7 +1,7 @@
 import { ROOT_DIV } from "../Helper/constants.js";
 import { globalData } from "../index.js";
 import { renderHighlight } from "../Render/main.js";
-import { clearHighlight } from "../Render/main.js";
+import { clearHighlight,moveElement } from "../Render/main.js";
 import { selfhlts,clearPrevSelfHlt } from "../Render/main.js";
 
 let selfhighlight=null;
@@ -11,6 +11,9 @@ let moveState=null;
 function whitePawnClicked({piece}){
     if (selfhighlight === piece) {
         clearHighlight();
+        clearPrevSelfHlt(selfhighlight);
+        selfhighlight=null;
+        moveState=null;
         return;
     }
     clearPrevSelfHlt(selfhighlight);
@@ -55,6 +58,31 @@ function GlobalEvent(){
                 whitePawnClicked(square);
             }      
         }else{
+            const childElementOfclickedEl=Array.from(event.target.childNodes);
+            if(moveState && (childElementOfclickedEl.length<=2 || 
+                event.target.localName=="span"
+            )){
+                if(event.target.localName=="span"){
+                    const id=event.target.parentNode.id;
+                    moveElement(moveState,id);
+                    moveState=null;
+
+                    clearPrevSelfHlt(selfhighlight);
+                    selfhighlight=null;
+                }
+                else{
+                    const id=event.target.id;
+                    moveElement(moveState,id);
+                    moveState=null;
+
+                    clearPrevSelfHlt(selfhighlight);
+                    selfhighlight=null;
+                }
+                
+            }else{
+                clearHighlight();
+                clearPrevSelfHlt(selfhighlight);
+            }
             
         }
     })
