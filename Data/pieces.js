@@ -2,14 +2,14 @@ function blackPawn(curr_pos){
     return{
         curr_pos,
         img:"./Gallery/images/pieces/black/pawn.png",
-        piece_name : "Black Pawn",
+        piece_name : "Black_Pawn",
     };
 }
 function blackBishop(curr_pos){
     return{
         curr_pos,
         img:"Gallery/images/pieces/black/bishop.png",
-        piece_name : "Black_Pawn",
+        piece_name : "Black_Bishop",
     };
 }
 function blackRook(curr_pos){

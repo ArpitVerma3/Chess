@@ -45,6 +45,43 @@ function whitePawnClicked({piece}){
         });
     }
 }
+function blackPawnClicked({piece}){
+    if (selfhighlight === piece) {
+        clearHighlight();
+        clearPrevSelfHlt(selfhighlight);
+        selfhighlight=null;
+        moveState=null;
+        return;
+    }
+    clearPrevSelfHlt(selfhighlight);
+    clearHighlight();
+    selfhlts(piece);
+
+    selfhighlight=piece;
+
+    moveState=piece;
+
+    const curr_posi=piece.curr_pos;
+
+    if(curr_posi[1]=="7"){
+        const hltsSqrIds=[
+            `${curr_posi[0]}${Number(curr_posi[1]) - 1}`,
+            `${curr_posi[0]}${Number(curr_posi[1]) - 2}`,
+        ];
+
+        hltsSqrIds.forEach((highlight) => {
+
+            globalData.forEach((row) => {
+                row.forEach((element) => {
+
+                    if(element.id==highlight){
+                        element.highlightSqr(true);
+                    }
+                });
+            });
+        });
+    }
+}
 function GlobalEvent(){
     ROOT_DIV.addEventListener("click",function(event){
         if(event.target.localName==="img"){
@@ -56,7 +93,10 @@ function GlobalEvent(){
 
             if(square.piece.piece_name==="White_Pawn"){
                 whitePawnClicked(square);
-            }      
+            }
+            else if(square.piece.piece_name==="Black_Pawn") {
+                blackPawnClicked(square);
+            }
         }else{
             const childElementOfclickedEl=Array.from(event.target.childNodes);
             if(moveState && (childElementOfclickedEl.length<=2 || 
