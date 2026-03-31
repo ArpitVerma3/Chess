@@ -3,6 +3,7 @@ import { globalData } from "../index.js";
 import { renderHighlight } from "../Render/main.js";
 import { clearHighlight,moveElement } from "../Render/main.js";
 import { selfhlts,clearPrevSelfHlt } from "../Render/main.js";
+import { checkOpponentPiece } from "../Helper/helpr1.js";
 
 let selfhighlight=null;
 //move state
@@ -80,6 +81,20 @@ function blackPawnClicked({piece}){
                 });
             });
         });
+    } else{
+        const col1=`{String.fromCharCode(curr_posi[0].charCodeAt(0)-1)${
+            Number(curr_posi[1])+1
+        }`;
+        const col2=`{String.fromCharCode(curr_posi[0].charCodeAt(0)+1)}${
+            Number(curr_posi[1])+1
+        }`;
+
+        console.log(col1,col2);
+        checkOpponentPiece(col1);
+        const highlightSqrIds=[
+            `${curr_posi[0]}${Number(curr_posi[1])+1}`,
+        ];
+        clearHighlight();
     }
 }
 function GlobalEvent(){

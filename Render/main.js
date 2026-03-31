@@ -25,8 +25,8 @@ function moveElement(piece,id){
     curr_piece.innerHTML=prev_piece.innerHTML;
     prev_piece.innerHTML="";
 
-    console.log(prev_piece);
-    console.log(curr_piece);
+    // console.log(prev_piece);
+    // console.log(curr_piece);
     
     piece.curr_pos=id;
 }
