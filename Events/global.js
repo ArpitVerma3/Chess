@@ -44,9 +44,31 @@ function whitePawnClicked({piece}){
                 });
             });
         });
+    }else{
+        const col1=`{String.fromCharCode(curr_posi[0].charCodeAt(0)-1)${
+            Number(curr_posi[1])+1
+        }`;
+        const col2=`{String.fromCharCode(curr_posi[0].charCodeAt(0)+1)}${
+            Number(curr_posi[1])+1
+        }`;
+
+        // console.log(col1,col2);
+        checkOpponentPiece(col1,"white");
+        checkOpponentPiece(col2,"white");
+
+        const captureIds=[col1,col2];
+
+        const highlightSqrIds=[
+            `${curr_posi[0]}${Number(curr_posi[1])+1}`,
+        ];
+        captureIds.forEach(element => {
+            checkOpponentPiece(element,"white");
+        });
+        clearHighlight();
     }
 }
 function blackPawnClicked({piece}){
+    //clearPrevSelfHlt(selfhighlight);
     if (selfhighlight === piece) {
         clearHighlight();
         clearPrevSelfHlt(selfhighlight);
@@ -89,7 +111,7 @@ function blackPawnClicked({piece}){
             Number(curr_posi[1])+1
         }`;
 
-        console.log(col1,col2);
+        // console.log(col1,col2);
         checkOpponentPiece(col1);
         const highlightSqrIds=[
             `${curr_posi[0]}${Number(curr_posi[1])+1}`,

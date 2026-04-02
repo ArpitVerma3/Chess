@@ -11,9 +11,13 @@ function checkOpponentPiece(id,color){
             if(element.piece && element.piece.piece_name.includes
                 (oppColor)
             ){
-
+                const el=document.getElementById(id);
+                el.classList.add("captureColor");
+                element.captureHiglight=true;
             }
+            break;
         }
+        return false;
         
     }
 }
