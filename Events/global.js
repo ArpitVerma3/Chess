@@ -6,10 +6,20 @@ import { selfhlts,clearPrevSelfHlt } from "../Render/main.js";
 import { checkOpponentPiece } from "../Helper/helpr1.js";
 
 let selfhighlight=null;
+let highlightState=false;
 //move state
 let moveState=null;
 
+function clearHighlightLocal(){
+    clearHighlight();
+    highlightState=false;
+}
+function move_piece_from_x_to_y(from,to){
+
+}
 function whitePawnClicked({piece}){
+    if(highlightState)return;
+
     if (selfhighlight === piece) {
         clearHighlight();
         clearPrevSelfHlt(selfhighlight);
@@ -69,6 +79,10 @@ function whitePawnClicked({piece}){
 }
 function blackPawnClicked({piece}){
     //clearPrevSelfHlt(selfhighlight);
+    if(highlightState){
+        move_piece_from_x_to_y(selfhighlight,piece);
+        return;
+    }
     if (selfhighlight === piece) {
         clearHighlight();
         clearPrevSelfHlt(selfhighlight);
