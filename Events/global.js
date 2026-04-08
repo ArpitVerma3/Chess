@@ -2,7 +2,7 @@ import { ROOT_DIV } from "../Helper/constants.js";
 import { globalData } from "../index.js";
 import { renderHighlight } from "../Render/main.js";
 import { clearHighlight,moveElement } from "../Render/main.js";
-import { selfhlts,clearPrevSelfHlt } from "../Render/main.js";
+import { selfhlts,clearPrevSelfHlt,globalStateRender } from "../Render/main.js";
 import { checkOpponentPiece } from "../Helper/helpr1.js";
 
 let selfhighlight=null;
@@ -18,6 +18,7 @@ function move_piece_from_x_to_y(from,to){
 
 }
 function whitePawnClicked({piece}){
+    globalStateRender();
     if(highlightState)return;
 
     if (selfhighlight === piece) {
@@ -78,7 +79,9 @@ function whitePawnClicked({piece}){
     }
 }
 function blackPawnClicked({piece}){
-    //clearPrevSelfHlt(selfhighlight);
+    
+    globalStateRender();
+
     if(highlightState){
         move_piece_from_x_to_y(selfhighlight,piece);
         return;
@@ -130,66 +133,6 @@ function blackPawnClicked({piece}){
         const highlightSqrIds=[
             `${curr_posi[0]}${Number(curr_posi[1])+1}`,
         ];
-        clearHighlight();
-    }
-}
-function BishopClicked({piece}){
-    if(highlightState)return;
-
-    if (selfhighlight === piece) {
-        clearHighlight();
-        clearPrevSelfHlt(selfhighlight);
-        selfhighlight=null;
-        moveState=null;
-        return;
-    }
-    clearPrevSelfHlt(selfhighlight);
-    clearHighlight();
-    selfhlts(piece);
-
-    selfhighlight=piece;
-
-    moveState=piece;
-
-    const curr_posi=piece.curr_pos;
-
-    if(curr_posi[1]=="1"){
-        const hltsSqrIds=[
-            `${curr_posi[0]}${Number(curr_posi[1]) + 1}`,
-            `${curr_posi[0]}${Number(curr_posi[1]) + 2}`,
-        ];
-
-        hltsSqrIds.forEach((highlight) => {
-
-            globalData.forEach((row) => {
-                row.forEach((element) => {
-
-                    if(element.id==highlight){
-                        element.highlightSqr(true);
-                    }
-                });
-            });
-        });
-    }else{
-        const col1=`{String.fromCharCode(curr_posi[0].charCodeAt(0)-1)${
-            Number(curr_posi[1])+1
-        }`;
-        const col2=`{String.fromCharCode(curr_posi[0].charCodeAt(0)+1)}${
-            Number(curr_posi[1])+1
-        }`;
-
-        // console.log(col1,col2);
-        checkOpponentPiece(col1,"white");
-        checkOpponentPiece(col2,"white");
-
-        const captureIds=[col1,col2];
-
-        const highlightSqrIds=[
-            `${curr_posi[0]}${Number(curr_posi[1])+1}`,
-        ];
-        captureIds.forEach(element => {
-            checkOpponentPiece(element,"white");
-        });
         clearHighlight();
     }
 }

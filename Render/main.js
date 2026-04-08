@@ -2,6 +2,16 @@ import * as pieces from "../Data/pieces.js";
 import { ROOT_DIV } from "../Helper/constants.js";
 import { globalData } from "../index.js";
 
+function globalStateRender(){
+    globalData.forEach(row => {
+        row.forEach((element)=> {
+            if(element.piece !=null){
+                console.log(element);
+            }
+        }) 
+    });
+}
+
 function moveElement(piece,id){
     const oldPos=piece.curr_pos;
     piece.curr_pos=id;
@@ -147,5 +157,5 @@ function renderHighlight(squareId){
 
 export { initGameRender,moveElement,
     clearPrevSelfHlt, renderHighlight,
-     clearHighlight ,selfhlts
+     clearHighlight ,selfhlts,globalStateRender
 };
