@@ -55,6 +55,7 @@ function whitePawnClicked({piece}){
                 });
             });
         });
+        globalStateRender();
     }else{
         const col1=`{String.fromCharCode(curr_posi[0].charCodeAt(0)-1)${
             Number(curr_posi[1])+1

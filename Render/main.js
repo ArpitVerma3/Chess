@@ -5,6 +5,17 @@ import { globalData } from "../index.js";
 function globalStateRender(){
     globalData.forEach(row => {
         row.forEach((element)=> {
+            if(element.highlight){
+                const squareEl = document.getElementById(element.squareId);
+                if (!squareEl) return;
+
+                const highlightSpan = document.createElement("span");
+                highlightSpan.classList.add("highlight");
+                squareEl.appendChild(highlightSpan);
+            }
+            else if(element.highlight==null){
+
+            }
             if(element.piece !=null){
                 console.log(element);
             }

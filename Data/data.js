@@ -2,11 +2,11 @@ import { renderHighlight } from "../Render/main.js";
 
 function square(color,id,piece){
 
-    const highlightSqr=function(){
-        renderHighlight(this.id);
-        this.highlightSqr=true;
-    };
-    return{color,id,piece,highlightSqr};
+    // const highlightSqr=function(){
+    //     renderHighlight(this.id);
+    //     this.highlightSqr=true;
+    // };
+    return{color,id,piece};
 }
 function sqrRow(rowId){
     const Rows=[];
