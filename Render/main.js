@@ -14,7 +14,7 @@ function globalStateRender(){
                 squareEl.appendChild(highlightSpan);
             }
             else if(element.highlight==null){
-
+                document.getElementById(element.id).innerHTML="";
             }
             if(element.piece !=null){
                 console.log(element);
