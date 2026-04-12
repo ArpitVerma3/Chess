@@ -21,13 +21,13 @@ function whitePawnClicked({piece}){
     globalStateRender();
     if(highlightState)return;
 
-    if (selfhighlight === piece) {
-        clearHighlight();
-        clearPrevSelfHlt(selfhighlight);
-        selfhighlight=null;
-        moveState=null;
-        return;
-    }
+    // if (selfhighlight === piece) {
+    //     clearHighlight();
+    //     clearPrevSelfHlt(selfhighlight);
+    //     selfhighlight=null;
+    //     moveState=null;
+    //     return;
+    // }
     clearPrevSelfHlt(selfhighlight);
     clearHighlight();
     selfhlts(piece);

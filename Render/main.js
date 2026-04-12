@@ -13,8 +13,13 @@ function globalStateRender(){
                 highlightSpan.classList.add("highlight");
                 squareEl.appendChild(highlightSpan);
             }
-            else if(element.highlight==null){
-                document.getElementById(element.id).innerHTML="";
+            else if(element.highlight === null){
+                const el=document.getElementById(element.id);
+                const highlights=Array.from(getElementsByTagName("span"));
+
+                highlights.forEach(element => {
+                    el.removeChild(element);
+                })
             }
             if(element.piece !=null){
                 console.log(element);
