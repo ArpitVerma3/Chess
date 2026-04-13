@@ -19,43 +19,82 @@ function globalStateRender(){
 
                 highlights.forEach(element => {
                     el.removeChild(element);
-                })
+                });
             }
             if(element.piece !=null){
-                console.log(element);
+                pieceRender(globalData);
+                const square=element;
+                
+                const squareEl=document.getElementById(square.id);
+                squareEl.innerHTML="";
+                const pieceEl=document.createElement("img");
+                pieceEl.src = square.piece.img;
+
+                pieceEl.classList.add("piece");
+                squareEl.appendChild(pieceEl);
+
+            }else{
+                const el=document.getElementById(element.id);
+                const highlights=Array.from(el.getElementsByClassName("piece"));
+
+                highlights.forEach(element => {
+                    el.removeChild(element);
+                });
             }
         }) 
     });
 }
 
 function moveElement(piece,id){
-    const oldPos=piece.curr_pos;
-    piece.curr_pos=id;
+
+    // const oldPos=piece.curr_pos;
+    // piece.curr_pos=id;
     const flatData=globalData.flat();
 
-    flatData.forEach((el)=>{
-        if(el.id==oldPos){
-            delete el.piece;
-        }
-        if(el.id==id){
-            el.piece=piece;
-        }
+    const to=flatData.find(el=>{
+        if(el.id==id)return el;
     });
-    clearHighlight();
 
-    const prev_piece=document.getElementById(oldPos);
-    const curr_piece=document.getElementById(id);
-
-    prev_piece.classList.remove("hltYlow");
-
-    curr_piece.innerHTML=prev_piece.innerHTML;
-    prev_piece.innerHTML="";
-
-    // console.log(prev_piece);
-    // console.log(curr_piece);
+    const from=flatData.find(el=>{
+        if(el.id==piece.curr_pos)return el;
+    });
+    to.piece=from.piece;
+    to.piece.curr_pos=from.id;
     
-    piece.curr_pos=id;
+    from.piece=null;
+    clearHighlight();
+    globalStateRender();
+
+    // to = piece;
+    // piece.piece=null;
+
+    // flatData.forEach((el)=>{
+    //     if(el.id==oldPos){
+    //         delete el.piece;
+    //     }
+    //     if(el.id==id){
+    //         el.piece=piece;
+    //     }
+    // });
+    // clearHighlight();
+
+    // const prev_piece=document.getElementById(oldPos);
+    // const curr_piece=document.getElementById(id);
+
+    // prev_piece.classList.remove("hltYlow");
+
+    // curr_piece.innerHTML=prev_piece.innerHTML;
+    // prev_piece.innerHTML="";
+    
+    // piece.curr_pos=id;
 }
+// function move_piece_from_x_to_y(from,to){
+//     to.piece=from.piece;
+//     to.piece.curr_pos=from.id;
+
+//     from.piece=null;
+//     globalStateRender();
+// }
 
 function selfhlts(piece){
     document.getElementById(piece.curr_pos)

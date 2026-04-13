@@ -18,16 +18,17 @@ function move_piece_from_x_to_y(from,to){
 
 }
 function whitePawnClicked({piece}){
-    globalStateRender();
+    // globalStateRender();
     if(highlightState)return;
 
-    // if (selfhighlight === piece) {
-    //     clearHighlight();
-    //     clearPrevSelfHlt(selfhighlight);
-    //     selfhighlight=null;
-    //     moveState=null;
-    //     return;
-    // }
+    if (selfhighlight === piece) {
+        clearHighlight();
+        clearPrevSelfHlt(selfhighlight);
+        selfhighlight=null;
+        moveState=null;
+        return;
+    }
+
     clearPrevSelfHlt(selfhighlight);
     clearHighlight();
     selfhlts(piece);
@@ -81,12 +82,12 @@ function whitePawnClicked({piece}){
 }
 function blackPawnClicked({piece}){
     
-    globalStateRender();
+    // globalStateRender();
 
-    if(highlightState){
-        move_piece_from_x_to_y(selfhighlight,piece);
-        return;
-    }
+    // if(highlightState){
+    //     move_piece_from_x_to_y(selfhighlight,piece);
+    //     return;
+    // }
     if (selfhighlight === piece) {
         clearHighlight();
         clearPrevSelfHlt(selfhighlight);
