@@ -21,7 +21,10 @@ function globalStateRender(){
                     el.removeChild(element);
                 });
             }
-            if(element.piece !=null){
+            if(element.piece){
+
+            }
+            if(element.piece?.change =null && element.piece!=null){
                 pieceRender(globalData);
                 const square=element;
                 
@@ -33,7 +36,7 @@ function globalStateRender(){
                 pieceEl.classList.add("piece");
                 squareEl.appendChild(pieceEl);
 
-            }else{
+            }else if(element.change !=null && element.piece==null){
                 const el=document.getElementById(element.id);
                 const highlights=Array.from(el.getElementsByClassName("piece"));
 
@@ -59,34 +62,32 @@ function moveElement(piece,id){
         if(el.id==piece.curr_pos)return el;
     });
     to.piece=from.piece;
-    to.piece.curr_pos=from.id;
-    
+    to.piece.change=true;
+    to.piece.curr_pos=to.id;
+
     from.piece=null;
-    clearHighlight();
-    globalStateRender();
+    from.change=true;
+    from.piece.change=true;
 
-    // to = piece;
-    // piece.piece=null;
-
-    // flatData.forEach((el)=>{
-    //     if(el.id==oldPos){
-    //         delete el.piece;
-    //     }
-    //     if(el.id==id){
-    //         el.piece=piece;
-    //     }
-    // });
-    // clearHighlight();
-
-    // const prev_piece=document.getElementById(oldPos);
-    // const curr_piece=document.getElementById(id);
-
-    // prev_piece.classList.remove("hltYlow");
-
-    // curr_piece.innerHTML=prev_piece.innerHTML;
-    // prev_piece.innerHTML="";
     
-    // piece.curr_pos=id;
+    flatData.forEach((el)=>{
+        if(el.id==oldPos){
+            delete el.piece;
+        }
+        if(el.id==id){
+            el.piece=piece;
+        }
+    });
+    const prev_piece=document.getElementById(oldPos);
+    const curr_piece=document.getElementById(id);
+
+    prev_piece.classList.remove("hltYlow");
+
+    curr_piece.innerHTML=prev_piece.innerHTML;
+    prev_piece.innerHTML="";
+    
+    piece.curr_pos=id;
+    clearHighlight();
 }
 // function move_piece_from_x_to_y(from,to){
 //     to.piece=from.piece;
@@ -197,7 +198,9 @@ function initGameRender(data){
 } 
 
 function clearHighlight(){
-    document.querySelectorAll(".highlight").forEach((el) => el.remove());
+    document.querySelectorAll(".highlight")
+    .forEach((el) => el.remove());
+    globalStateRender();
 }
 
 function renderHighlight(squareId){
