@@ -15,7 +15,9 @@ function clearHighlightLocal(){
     highlightState=false;
 }
 function move_piece_from_x_to_y(from,to){
-
+    to.piece=from.piece;
+    from.piece=null;
+    globalStateRender();
 }
 function whitePawnClicked({piece}){
     // globalStateRender();
@@ -51,19 +53,26 @@ function whitePawnClicked({piece}){
                 row.forEach((element) => {
 
                     if(element.id==highlight){
-                        element.highlightSqr(true);
+                        renderHighlight(element.id);
                     }
                 });
             });
         });
-        globalStateRender();
+        const col1 = `${String.fromCharCode(curr_posi[0].charCodeAt(0) - 1)}
+        ${Number(curr_posi[1]) + 1}`;
+
+        const col2 = `${String.fromCharCode(curr_posi[0].charCodeAt(0) + 1)}
+        ${Number(curr_posi[1]) + 1}`;
+
+        checkOpponentPiece(col1,"white");
+        checkOpponentPiece(col2,"white");
+      //  globalStateRender();
     }else{
-        const col1=`{String.fromCharCode(curr_posi[0].charCodeAt(0)-1)${
-            Number(curr_posi[1])+1
-        }`;
-        const col2=`{String.fromCharCode(curr_posi[0].charCodeAt(0)+1)}${
-            Number(curr_posi[1])+1
-        }`;
+        const col1 = `${String.fromCharCode(curr_posi[0].charCodeAt(0) - 1)}
+        ${Number(curr_posi[1]) + 1}`;
+
+        const col2 = `${String.fromCharCode(curr_posi[0].charCodeAt(0) + 1)}
+        ${Number(curr_posi[1]) + 1}`;
 
         // console.log(col1,col2);
         checkOpponentPiece(col1,"white");
@@ -74,20 +83,20 @@ function whitePawnClicked({piece}){
         const highlightSqrIds=[
             `${curr_posi[0]}${Number(curr_posi[1])+1}`,
         ];
-        captureIds.forEach(element => {
-            checkOpponentPiece(element,"white");
-        });
-        clearHighlight();
+        // captureIds.forEach(element => {
+        //     checkOpponentPiece(element,"white");
+        // });
+        renderHighlight(highlightSqrIds);
+        // clearHighlight();
     }
 }
 function blackPawnClicked({piece}){
     
-    // globalStateRender();
-
-    // if(highlightState){
-    //     move_piece_from_x_to_y(selfhighlight,piece);
-    //     return;
-    // }
+    if(highlightState){
+        //move_piece_from_x_to_y(selfhighlight,piece);
+        moveElement(highlightState,piece);
+        return;
+    }
     if (selfhighlight === piece) {
         clearHighlight();
         clearPrevSelfHlt(selfhighlight);
@@ -117,25 +126,34 @@ function blackPawnClicked({piece}){
                 row.forEach((element) => {
 
                     if(element.id==highlight){
-                        element.highlightSqr(true);
+                        renderHighlight(element.id);
                     }
                 });
             });
         });
+        const col1 = `${String.fromCharCode(curr_posi[0].charCodeAt(0) - 1)}
+        ${Number(curr_posi[1]) - 1}`;
+        const col2 = `${String.fromCharCode(curr_posi[0].charCodeAt(0) + 1)}
+        ${Number(curr_posi[1]) - 1}`;
+
+        checkOpponentPiece(col1,black);
+        checkOpponentPiece(col2,black);
+
     } else{
-        const col1=`{String.fromCharCode(curr_posi[0].charCodeAt(0)-1)${
-            Number(curr_posi[1])+1
-        }`;
-        const col2=`{String.fromCharCode(curr_posi[0].charCodeAt(0)+1)}${
-            Number(curr_posi[1])+1
-        }`;
+        const col1 = `${String.fromCharCode(curr_posi[0].charCodeAt(0) - 1)}
+        ${Number(curr_posi[1]) - 1}`;
+
+        const col2 = `${String.fromCharCode(curr_posi[0].charCodeAt(0) + 1)}
+        ${Number(curr_posi[1]) - 1}`;
 
         // console.log(col1,col2);
-        checkOpponentPiece(col1);
+        checkOpponentPiece(col1,black);
+        checkOpponentPiece(col2,black);
+
         const highlightSqrIds=[
             `${curr_posi[0]}${Number(curr_posi[1])+1}`,
         ];
-        clearHighlight();
+        renderHighlight(highlightSqrIds);
     }
 }
 function GlobalEvent(){
@@ -147,6 +165,14 @@ function GlobalEvent(){
             //searching
             const square=flatArray.find((el)=>el.id==clickId);
 
+            if(moveState && square.captureHighlight){
+                moveElement(moveState, clickId);
+                moveState = null;
+                clearPrevSelfHlt(selfhighlight);
+                selfhighlight = null;
+                return;
+            }
+            if(!square.piece) return;
             if(square.piece.piece_name==="White_Pawn"){
                 whitePawnClicked(square);
             }

@@ -5,89 +5,42 @@ import { globalData } from "../index.js";
 function globalStateRender(){
     globalData.forEach(row => {
         row.forEach((element)=> {
-            if(element.highlight){
-                const squareEl = document.getElementById(element.squareId);
-                if (!squareEl) return;
+            const squareEl=document.getElementById(element.id);
+            if (!squareEl) return;
 
+            squareEl.innerHTML = "";
+
+            if(element.isHighlighted){
                 const highlightSpan = document.createElement("span");
                 highlightSpan.classList.add("highlight");
                 squareEl.appendChild(highlightSpan);
             }
-            else if(element.highlight === null){
-                const el=document.getElementById(element.id);
-                const highlights=Array.from(getElementsByTagName("span"));
 
-                highlights.forEach(element => {
-                    el.removeChild(element);
-                });
-            }
             if(element.piece){
-
-            }
-            if(element.piece?.change =null && element.piece!=null){
-                pieceRender(globalData);
-                const square=element;
-                
-                const squareEl=document.getElementById(square.id);
-                squareEl.innerHTML="";
                 const pieceEl=document.createElement("img");
-                pieceEl.src = square.piece.img;
-
+                pieceEl.src = element.piece.img;
                 pieceEl.classList.add("piece");
                 squareEl.appendChild(pieceEl);
-
-            }else if(element.change !=null && element.piece==null){
-                const el=document.getElementById(element.id);
-                const highlights=Array.from(el.getElementsByClassName("piece"));
-
-                highlights.forEach(element => {
-                    el.removeChild(element);
-                });
             }
         }) 
     });
 }
 
 function moveElement(piece,id){
-
-    // const oldPos=piece.curr_pos;
-    // piece.curr_pos=id;
     const flatData=globalData.flat();
 
-    const to=flatData.find(el=>{
-        if(el.id==id)return el;
-    });
+    const from=flatData.find(el => el.id === piece.curr_pos);
+    const to=flatData.find(el => el.id === id);
+    if(!from || !to) return;
 
-    const from=flatData.find(el=>{
-        if(el.id==piece.curr_pos)return el;
-    });
     to.piece=from.piece;
-    to.piece.change=true;
     to.piece.curr_pos=to.id;
-
     from.piece=null;
-    from.change=true;
-    from.piece.change=true;
 
-    
-    flatData.forEach((el)=>{
-        if(el.id==oldPos){
-            delete el.piece;
-        }
-        if(el.id==id){
-            el.piece=piece;
-        }
-    });
-    const prev_piece=document.getElementById(oldPos);
-    const curr_piece=document.getElementById(id);
-
-    prev_piece.classList.remove("hltYlow");
-
-    curr_piece.innerHTML=prev_piece.innerHTML;
-    prev_piece.innerHTML="";
-    
     piece.curr_pos=id;
+
     clearHighlight();
+    globalStateRender();
 }
 // function move_piece_from_x_to_y(from,to){
 //     to.piece=from.piece;
@@ -198,19 +151,30 @@ function initGameRender(data){
 } 
 
 function clearHighlight(){
+    globalData.flat().forEach(el => {
+        el.isHighlighted=false;
+        el.captureHighlight=false;
+    });
     document.querySelectorAll(".highlight")
     .forEach((el) => el.remove());
+    document.querySelectorAll(".captureColor").forEach((el) => el.classList.remove("captureColor"));
     globalStateRender();
 }
 
 function renderHighlight(squareId){
-    const squareEl = document.getElementById(squareId);
-    if (!squareEl) return;
-
-    const highlightSpan = document.createElement("span");
-    highlightSpan.classList.add("highlight");
-
-    squareEl.appendChild(highlightSpan);
+    const ids = Array.isArray(squareId) ? squareId : [squareId];
+    ids.forEach(id => {
+        const square = globalData.flat().find(el => el.id === id);
+        if(!square) return;
+        square.isHighlighted=true;
+        const squareEl = document.getElementById(id);
+        if(!squareEl) return;
+        if(!squareEl.querySelector(".highlight")){
+            const highlightSpan = document.createElement("span");
+            highlightSpan.classList.add("highlight");
+            squareEl.appendChild(highlightSpan);
+        }
+    });
 }
 
 export { initGameRender,moveElement,

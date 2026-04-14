@@ -8,17 +8,13 @@ function checkOpponentPiece(id,color){
         const element = flatArray[index];
 
         if(element.id==id){
-            if(element.piece && element.piece.piece_name.includes
-                (oppColor)
-            ){
+            if(element.piece && element.piece.piece_name.includes(oppColor)){
                 const el=document.getElementById(id);
                 el.classList.add("captureColor");
-                element.captureHiglight=true;
+                element.captureHighlight=true;
             }
             break;
         }
-        return false;
-        
     }
 }
 export {checkOpponentPiece};
