@@ -1,5 +1,5 @@
 import { ROOT_DIV } from "../Helper/constants.js";
-import { globalData } from "../index.js";
+import { globalData, keyMapper } from "../index.js";
 import { renderHighlight } from "../Render/main.js";
 import { clearHighlight,moveElement } from "../Render/main.js";
 import { selfhlts,clearPrevSelfHlt,globalStateRender } from "../Render/main.js";
@@ -66,6 +66,8 @@ function whitePawnClicked({piece}){
 
         checkOpponentPiece(col1,"white");
         checkOpponentPiece(col2,"white");
+
+        clearHighlight();
       //  globalStateRender();
     }else{
         const col1 = `${String.fromCharCode(curr_posi[0].charCodeAt(0) - 1)}
@@ -87,7 +89,7 @@ function whitePawnClicked({piece}){
         //     checkOpponentPiece(element,"white");
         // });
         renderHighlight(highlightSqrIds);
-        // clearHighlight();
+      //  clearHighlight();
     }
 }
 function blackPawnClicked({piece}){
@@ -154,6 +156,7 @@ function blackPawnClicked({piece}){
             `${curr_posi[0]}${Number(curr_posi[1])+1}`,
         ];
         renderHighlight(highlightSqrIds);
+        //clearHighlight();
     }
 }
 function GlobalEvent(){
@@ -161,9 +164,11 @@ function GlobalEvent(){
         if(event.target.localName==="img"){
             const clickId=event.target.parentNode.id;
 
-            const flatArray=globalData.flat();
+            // const flatArray=globalData.flat();
             //searching
-            const square=flatArray.find((el)=>el.id==clickId);
+            // const square=flatArray.find((el)=>el.id==clickId);
+
+            const square=keyMapper[clickId];
 
             if(moveState && square.captureHighlight){
                 moveElement(moveState, clickId);

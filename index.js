@@ -4,9 +4,15 @@ import { GlobalEvent } from "./Events/global.js";
 
 const globalData=InitGame();
 
+let keyMapper = {};
+
+globalData.flat.forEach(square => {
+    keyMapper[square.id]=square;
+});
+
 initGameRender(globalData);
 GlobalEvent();
 
-export {globalData};
+export {globalData, keyMapper};
 
 
