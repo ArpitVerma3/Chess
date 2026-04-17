@@ -10,6 +10,9 @@ let highlightState=false;
 //move state
 let moveState=null;
 
+function bishopclk(){
+    
+}
 function clearHighlightLocal(){
     clearHighlight();
     highlightState=false;
