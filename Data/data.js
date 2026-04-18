@@ -33,7 +33,7 @@ function sqrRow(rowId){
     }
     return Rows;
 }
-function InitGame(){
+function initGame(){
     return [
         sqrRow(8),
         sqrRow(7),
@@ -45,4 +45,4 @@ function InitGame(){
         sqrRow(1),
     ];
 }
-export{InitGame};
+export{initGame};

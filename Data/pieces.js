@@ -1,84 +1,84 @@
-function blackPawn(curr_pos){
+function blackPawn(current_position){
     return{
-        curr_pos,
+        current_position,
         img:"./Gallery/images/pieces/black/pawn.png",
         piece_name : "Black_Pawn",
     };
 }
-function blackBishop(curr_pos){
+function blackBishop(current_position){
     return{
-        curr_pos,
-        img:"Gallery/images/pieces/black/bishop.png",
+        current_position,
+        img:"./Gallery/images/pieces/black/bishop.png",
         piece_name : "Black_Bishop",
     };
 }
-function blackRook(curr_pos){
+function blackRook(current_position){
     return{
-        curr_pos,
-        img:"Gallery/images/pieces/black/rook.png",
+        current_position,
+        img:"./Gallery/images/pieces/black/rook.png",
         piece_name : "Black_Rook",
     };
 }
-function blackKnight(curr_pos){
+function blackKnight(current_position){
     return{
-        curr_pos,
-        img:"Gallery/images/pieces/black/knight.png",
+        current_position,
+        img:"./Gallery/images/pieces/black/knight.png",
         piece_name : "Black_Knight",
     };
 }
-function blackKing(curr_pos){
+function blackKing(current_position){
     return{
-        curr_pos,
-        img:"Gallery/images/pieces/black/king.png",
+        current_position,
+        img:"./Gallery/images/pieces/black/king.png",
         piece_name : "Black_King",
     };
 }
-function blackQueen(curr_pos){
+function blackQueen(current_position){
     return{
-        curr_pos,
-        img:"Gallery/images/pieces/black/queen.png",
+        current_position,
+        img:"./Gallery/images/pieces/black/queen.png",
         piece_name : "Black_Queen",
     };
 }
-function whitePawn(curr_pos){
+function whitePawn(current_position){
     return{
-        curr_pos,
+        current_position,
         img:"./Gallery/images/pieces/white/pawn.png",
         piece_name : "White_Pawn",
     };
 }
-function whiteBishop(curr_pos){
+function whiteBishop(current_position){
     return{
-        curr_pos,
-        img:"Gallery/images/pieces/white/bishop.png",
+        current_position,
+        img:"./Gallery/images/pieces/white/bishop.png",
         piece_name : "White_Bishop",
     };
 }
-function whiteRook(curr_pos){
+function whiteRook(current_position){
     return{
-        curr_pos,
-        img:"Gallery/images/pieces/white/rook.png",
+        current_position,
+        img:"./Gallery/images/pieces/white/rook.png",
         piece_name : "White_Rook",
     };
 }
-function whiteKnight(curr_pos){
+function whiteKnight(current_position){
     return{
-        curr_pos,
-        img:"Gallery/images/pieces/white/knight.png",
+        current_position,
+        img:"./Gallery/images/pieces/white/knight.png",
         piece_name : "White_Knight",
     };
 }
-function whiteKing(curr_pos){
+function whiteKing(current_position){
     return{
-        curr_pos,
-        img:"Gallery/images/pieces/white/king.png",
+        current_position,
+        img:"./Gallery/images/pieces/white/king.png",
         piece_name : "White_King",
     };
 }
-function whiteQueen(curr_pos){
+function whiteQueen(current_position){
     return{
-        curr_pos,
-        img:"Gallery/images/pieces/white/queen.png",
+        current_position,
+        img:"./Gallery/images/pieces/white/queen.png",
         piece_name : "White_Queen",
     };
 }

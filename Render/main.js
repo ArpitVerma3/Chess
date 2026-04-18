@@ -1,183 +1,178 @@
-import * as pieces from "../Data/pieces.js";
+import * as piece from "../Data/pieces.js";
 import { ROOT_DIV } from "../Helper/constants.js";
-import { globalData } from "../index.js";
+import { globalState } from "../index.js";
 
-function globalStateRender(){
-    globalData.forEach(row => {
-        row.forEach((element)=> {
-            const squareEl=document.getElementById(element.id);
-            if (!squareEl) return;
-
-            squareEl.innerHTML = "";
-
-            if(element.isHighlighted){
-                const highlightSpan = document.createElement("span");
-                highlightSpan.classList.add("highlight");
-                squareEl.appendChild(highlightSpan);
-            }
-
-            if(element.piece){
-                const pieceEl=document.createElement("img");
-                pieceEl.src = element.piece.img;
-                pieceEl.classList.add("piece");
-                squareEl.appendChild(pieceEl);
-            }
-        }) 
+function globalStateRender() {
+  globalState.forEach((row) => {
+    row.forEach((element) => {
+      if (element.highlight) {
+        const highlightSpan = document.createElement("span");
+        highlightSpan.classList.add("highlight");
+        document.getElementById(element.id).appendChild(highlightSpan);
+        // } else if (element.highlight === null) {
+      } else {
+        const el = document.getElementById(element.id);
+        const highlights = Array.from(el.getElementsByTagName("span"));
+        highlights.forEach((element) => {
+          el.removeChild(element);
+        });
+        // document.getElementById(element.id).innerHTML = "";
+      }
     });
+  });
 }
 
-function moveElement(piece,id){
-    const flatData=globalData.flat();
-
-    const from=flatData.find(el => el.id === piece.curr_pos);
-    const to=flatData.find(el => el.id === id);
-    if(!from || !to) return;
-
-    to.piece=from.piece;
-    to.piece.curr_pos=to.id;
-    from.piece=null;
-
-    piece.curr_pos=id;
-
-    clearHighlight();
-    globalStateRender();
-}
-// function move_piece_from_x_to_y(from,to){
-//     to.piece=from.piece;
-//     to.piece.curr_pos=from.id;
-
-//     from.piece=null;
-//     globalStateRender();
-// }
-
-function selfhlts(piece){
-    document.getElementById(piece.curr_pos)
-    .classList.add("hltYlow");
-}
-function clearPrevSelfHlt(piece){
-    if(piece){
-    document.getElementById(piece.curr_pos)
-    .classList.remove("hltYlow");
+// move element to square with id
+function moveElement(piece, id) {
+  const flatData = globalState.flat();
+  flatData.forEach((el) => {
+    if (el.id == piece.current_position) {
+      delete el.piece;
     }
+    if (el.id == id) {
+      el.piece = piece;
+    }
+  });
+  clearHighlight();
+
+  const previousPiece = document.getElementById(piece.current_position);
+  previousPiece.classList.remove("highlightYellow");
+
+  const currentPiece = document.getElementById(id);
+  currentPiece.innerHTML = previousPiece.innerHTML;
+
+  previousPiece.innerHTML = "";
+  piece.current_position = id;
+  // globalStateRender();
 }
-function pieceRender(data){
 
-    data.forEach(row => {
-        row.forEach(square => {
-
-            //if suqre alrdy have piece :
-            if(square.piece){
-                const squareEl=document.getElementById(square.id);
-
-                const pieceEl=document.createElement("img");
-                pieceEl.src = square.piece.img;
-
-                pieceEl.classList.add("piece");
-                squareEl.appendChild(pieceEl);
-            }
-        });
-    });
+function selfHighlight(piece) {
+  document
+    .getElementById(piece.current_position)
+    .classList.add("highlightYellow");
 }
-function initGameRender(data){
 
-    data.forEach(element => {
-        const rowEl=document.createElement("div");
+// use when you want to render pieces on board
+function pieceRender(data) {
+  data.forEach((row) => {
+    row.forEach((square) => {
+      // if square has piece
+      if (square.piece) {
+        const squareEl = document.getElementById(square.id);
 
-        element.forEach(square => {
-            const squareDiv=document.createElement("div");
-            
-            squareDiv.classList.add("square");
-            squareDiv.classList.add(square.color);
-            
-            squareDiv.id=square.id;
-            
-            //black rook
-            if(square.id=="h8" || square.id=="a8"){
-                square.piece=pieces.blackRook(square.id);
-            }
-            //black knight
-            if(square.id=="b8" || square.id=="g8"){
-                square.piece=pieces.blackKnight(square.id);
-            }
-            //black bishop
-            if(square.id=="c8" || square.id=="f8"){
-                square.piece=pieces.blackBishop(square.id);
-            }
-            //black queen
-            if(square.id=="d8"){
-                square.piece=pieces.blackQueen(square.id);
-            }
-            //black king
-            if(square.id=="e8"){
-                square.piece=pieces.blackKing(square.id);
-            }
-            //black pawn
-            if(square.id[1]==7){
-                square.piece=pieces.blackPawn(square.id);
-            }
+        // create piece
+        const piece = document.createElement("img");
+        piece.src = square.piece.img;
+        piece.classList.add("piece");
 
-             //white rook
-            if(square.id=="a1" || square.id=="h1"){
-                square.piece=pieces.whiteRook(square.id);
-            }
-            //white knight
-            if(square.id=="b1" || square.id=="g1"){
-                square.piece=pieces.whiteKnight(square.id);
-            }
-            //white bishop
-            if(square.id=="c1" || square.id=="f1"){
-                square.piece=pieces.whiteBishop(square.id);
-            }
-            //white queen
-            if(square.id=="d1"){
-                square.piece=pieces.whiteQueen(square.id);
-            }
-            //white king
-            if(square.id=="e1"){
-                square.piece=pieces.whiteKing(square.id);
-            }
-            //white pawn
-            if(square.id[1]==2){
-                square.piece=pieces.whitePawn(square.id);
-            }
-            
-            rowEl.appendChild(squareDiv);
-        });
-        rowEl.classList.add("sqrRow");
-        ROOT_DIV.appendChild(rowEl);
+        // insert piece into square element
+        squareEl.appendChild(piece);
+      }
     });
+  });
+}
 
-    pieceRender(data);
-} 
+// use when you want to render board for first time when game start
+function initGameRender(data) {
+  data.forEach((element) => {
+    const rowEl = document.createElement("div");
+    element.forEach((square) => {
+      const squareDiv = document.createElement("div");
+      squareDiv.id = square.id;
+      squareDiv.classList.add(square.color, "square");
 
-function clearHighlight(){
-    globalData.flat().forEach(el => {
-        el.isHighlighted=false;
-        el.captureHighlight=false;
+      // render blackpawn
+      if (square.id[1] == 7) {
+        square.piece = piece.blackPawn(square.id);
+      }
+
+      // render black rook
+      if (square.id == "h8" || square.id == "a8") {
+        square.piece = piece.blackRook(square.id);
+      }
+
+      // render black knight
+      if (square.id == "b8" || square.id == "g8") {
+        square.piece = piece.blackKnight(square.id);
+      }
+      // render black bishop
+      if (square.id == "c8" || square.id == "f8") {
+        square.piece = piece.blackBishop(square.id);
+      }
+      // render black queen
+      if (square.id == "d8") {
+        square.piece = piece.blackQueen(square.id);
+      }
+      // render black king
+      if (square.id == "e8") {
+        square.piece = piece.blackKing(square.id);
+      }
+
+      // render white pawn
+      if (square.id[1] == 2) {
+        square.piece = piece.whitePawn(square.id);
+      }
+      // render white queen
+      if (square.id == "d1") {
+        square.piece = piece.whiteQueen(square.id);
+      }
+
+      // render white king
+      if (square.id == "e1") {
+        square.piece = piece.whiteKing(square.id);
+      }
+
+      // render white rook
+      if (square.id == "h1" || square.id == "a1") {
+        square.piece = piece.whiteRook(square.id);
+      }
+
+      // render white knight
+      if (square.id == "b1" || square.id == "g1") {
+        square.piece = piece.whiteKnight(square.id);
+      }
+
+      // render white bishop
+      if (square.id == "c1" || square.id == "f1") {
+        square.piece = piece.whiteBishop(square.id);
+      }
+
+      rowEl.appendChild(squareDiv);
     });
-    document.querySelectorAll(".highlight")
-    .forEach((el) => el.remove());
-    document.querySelectorAll(".captureColor").forEach((el) => el.classList.remove("captureColor"));
+    rowEl.classList.add("squareRow");
+    ROOT_DIV.appendChild(rowEl);
+  });
+
+  pieceRender(data);
+}
+
+// render highlight circle
+function renderHighlight(squareId) {
+  const highlightSpan = document.createElement("span");
+  highlightSpan.classList.add("highlight");
+  document.getElementById(squareId).appendChild(highlightSpan);
+}
+
+// clear all highlights from the board
+function clearHighlight() {
+  const flatData = globalState.flat();
+
+  flatData.forEach((el) => {
+    if (el.captureHighlight) {
+      document.getElementById(el.id).classList.remove("captureColor");
+      el.captureHighlight = false;
+    }
+
+    if (el.highlight) {
+      el.highlight = null;
+    }
+
     globalStateRender();
+  });
 }
 
-function renderHighlight(squareId){
-    const ids = Array.isArray(squareId) ? squareId : [squareId];
-    ids.forEach(id => {
-        const square = globalData.flat().find(el => el.id === id);
-        if(!square) return;
-        square.isHighlighted=true;
-        const squareEl = document.getElementById(id);
-        if(!squareEl) return;
-        if(!squareEl.querySelector(".highlight")){
-            const highlightSpan = document.createElement("span");
-            highlightSpan.classList.add("highlight");
-            squareEl.appendChild(highlightSpan);
-        }
-    });
-}
-
-export { initGameRender,moveElement,
-    clearPrevSelfHlt, renderHighlight,
-     clearHighlight ,selfhlts,globalStateRender
+export {
+  initGameRender, renderHighlight,
+  clearHighlight, selfHighlight,
+  moveElement,  globalStateRender,
 };
