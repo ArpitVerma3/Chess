@@ -155,11 +155,6 @@ function whiteBishopClick(square) {
     element.highlight = true;
   });
 
-  // highlightSquareIds.forEach((highlight) => {
-  //   const element = keySquareMapper[highlight];
-  //   element.highlight = true;
-  // });
-
   let captureIds = [];
 
   for (let index = 0; index < temp.length; index++) {
@@ -242,12 +237,6 @@ function blackBishopClick(square) {
     const element = keySquareMapper[highlight];
     element.highlight = true;
   });
-
-  // highlightSquareIds.forEach((highlight) => {
-  //   const element = keySquareMapper[highlight];
-  //   element.highlight = true;
-  // });
-
   let captureIds = [];
 
   for (let index = 0; index < temp.length; index++) {

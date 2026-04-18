@@ -66,7 +66,6 @@ function pieceRender(data) {
         piece.src = square.piece.img;
         piece.classList.add("piece");
 
-        // insert piece into square element
         squareEl.appendChild(piece);
       }
     });
