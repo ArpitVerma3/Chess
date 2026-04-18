@@ -1,13 +1,10 @@
 import { ROOT_DIV } from "../Helper/constants.js";
-import { renderHighlight } from "../Render/main.js";
-import { clearHighlight } from "../Render/main.js";
-import { selfHighlight } from "../Render/main.js";
+import { renderHighlight, clearHighlight,selfHighlight } from "../Render/main.js";
 
 import { giveBishopHighlightIds, checkSquareCaptureId, checkPieceOfOpponentOnElement,
     checkWhetherPieceExistsOrNot } from "../Helper/commonHelper.js";
 
-import { globalStateRender } from "../Render/main.js";
-import { moveElement } from "../Render/main.js";
+import { globalStateRender, moveElement } from "../Render/main.js";
 import { globalState, keySquareMapper } from "../index.js";
 
 // import { clearPreviousSelfHighlight } from "../Render/main.js";
@@ -19,20 +16,17 @@ let selfHighlightState = null;
 // in move state or not
 let moveState = null;
 
-// local function that will clear highlight with state
 function clearHighlightLocal() {
   clearHighlight();
   highlight_state = false;
 }
 
-// move piece from x-square to y-square
 function movePieceFromXToY(from, to) {
   to.piece = from.piece;
   from.piece = null;
   globalStateRender();
 }
 
-// white pawn event
 function whitePawnClick(square) {
   const piece = square.piece;
 
@@ -124,8 +118,6 @@ function whiteBishopClick(square) {
     clearHighlightLocal();
     return;
   }
-
-  // clear all highlights
   clearPreviousSelfHighlight(selfHighlightState);
   clearHighlightLocal();
 
@@ -134,7 +126,6 @@ function whiteBishopClick(square) {
   highlight_state = true;
   selfHighlightState = piece;
 
-  // add piece as move state
   moveState = piece;
 
   const current_pos = piece.current_position;
@@ -143,7 +134,7 @@ function whiteBishopClick(square) {
   let highlightSquareIds = giveBishopHighlightIds(current_pos);
   let temp = [];
 
-  const { bottomLeft, topLeft, bottomRight, topRight } = highlightSquareIds;
+  const {bottomLeft, topLeft, bottomRight, topRight } = highlightSquareIds;
 
   let result = [];
   result.push(checkSquareCaptureId(bottomLeft));
@@ -164,10 +155,10 @@ function whiteBishopClick(square) {
     element.highlight = true;
   });
 
-  highlightSquareIds.forEach((highlight) => {
-    const element = keySquareMapper[highlight];
-    element.highlight = true;
-  });
+  // highlightSquareIds.forEach((highlight) => {
+  //   const element = keySquareMapper[highlight];
+  //   element.highlight = true;
+  // });
 
   let captureIds = [];
 
@@ -177,7 +168,7 @@ function whiteBishopClick(square) {
     for (let j = 0; j < arr.length; j++) {
       const element = arr[j];
 
-      let checkPieceResult = checkWeatherPieceExistsOrNot(element);
+      let checkPieceResult = checkWhetherPieceExistsOrNot(element);
       if (
         checkPieceResult &&
         checkPieceResult.piece &&
@@ -252,10 +243,10 @@ function blackBishopClick(square) {
     element.highlight = true;
   });
 
-  highlightSquareIds.forEach((highlight) => {
-    const element = keySquareMapper[highlight];
-    element.highlight = true;
-  });
+  // highlightSquareIds.forEach((highlight) => {
+  //   const element = keySquareMapper[highlight];
+  //   element.highlight = true;
+  // });
 
   let captureIds = [];
 
@@ -265,7 +256,7 @@ function blackBishopClick(square) {
     for (let j = 0; j < arr.length; j++) {
       const element = arr[j];
 
-      let checkPieceResult = checkWeatherPieceExistsOrNot(element);
+      let checkPieceResult = checkWhetherPieceExistsOrNot(element);
       if (
         checkPieceResult &&
         checkPieceResult.piece &&

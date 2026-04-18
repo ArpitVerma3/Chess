@@ -8,15 +8,16 @@ function globalStateRender() {
       if (element.highlight) {
         const highlightSpan = document.createElement("span");
         highlightSpan.classList.add("highlight");
+
         document.getElementById(element.id).appendChild(highlightSpan);
-        // } else if (element.highlight === null) {
+        
       } else {
         const el = document.getElementById(element.id);
         const highlights = Array.from(el.getElementsByTagName("span"));
+
         highlights.forEach((element) => {
           el.removeChild(element);
         });
-        // document.getElementById(element.id).innerHTML = "";
       }
     });
   });
@@ -72,7 +73,6 @@ function pieceRender(data) {
   });
 }
 
-// use when you want to render board for first time when game start
 function initGameRender(data) {
   data.forEach((element) => {
     const rowEl = document.createElement("div");
@@ -146,14 +146,13 @@ function initGameRender(data) {
   pieceRender(data);
 }
 
-// render highlight circle
+
 function renderHighlight(squareId) {
   const highlightSpan = document.createElement("span");
   highlightSpan.classList.add("highlight");
   document.getElementById(squareId).appendChild(highlightSpan);
 }
 
-// clear all highlights from the board
 function clearHighlight() {
   const flatData = globalState.flat();
 

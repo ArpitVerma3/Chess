@@ -65,7 +65,6 @@ function giveBishopHighlightIds(id) {
     return resultArray;
   }
 
-  // find bottom left ids
   function bottomLeft(id) {
     let alpha = id[0];
     let num = Number(id[1]);
@@ -80,7 +79,6 @@ function giveBishopHighlightIds(id) {
     return resultArray;
   }
 
-  // find top right ids
   function topRight(id) {
     let alpha = id[0];
     let num = Number(id[1]);
@@ -95,7 +93,6 @@ function giveBishopHighlightIds(id) {
     return resultArray;
   }
 
-  // find bottom right ids
   function bottomRight(id) {
     let alpha = id[0];
     let num = Number(id[1]);
