@@ -47,6 +47,71 @@ function checkSquareCaptureId(array) {
   return returnArray;
 }
 
+function RooksHlts(){
+    let finalReturnArray = [];
+
+  function top(id) {
+    let alpha = id[0];
+    let num = Number(id[1]);
+    let resultArray = [];
+
+    while (num != 8) {
+      num = num + 1;
+      resultArray.push(`${alpha}${num}`);
+    }
+
+    return resultArray;
+  }
+
+  function bottom(id) {
+    let alpha = id[0];
+    let num = Number(id[1]);
+    let resultArray = [];
+
+    while (alpha != "a" && num != 1) {
+      alpha = String.fromCharCode(alpha.charCodeAt(0) - 1);
+      num = num - 1;
+      resultArray.push(`${alpha}${num}`);
+    }
+
+    return resultArray;
+  }
+
+  function right(id) {
+    let alpha = id[0];
+    let num = Number(id[1]);
+    let resultArray = [];
+
+    while (alpha != "h" && num != 8) {
+      alpha = String.fromCharCode(alpha.charCodeAt(0) + 1);
+      num = num + 1;
+      resultArray.push(`${alpha}${num}`);
+    }
+
+    return resultArray;
+  }
+
+  function left(id) {
+    let alpha = id[0];
+    let num = Number(id[1]);
+    let resultArray = [];
+
+    while (alpha != "h" && num != 1) {
+      alpha = String.fromCharCode(alpha.charCodeAt(0) + 1);
+      num = num - 1;
+      resultArray.push(`${alpha}${num}`);
+    }
+
+    return resultArray;
+  }
+
+  return {
+    topLeft: top(id),
+    bottomLeft: bottom(id),
+    topRight: right(id),
+    bottomRight: left(id),
+  };
+}
 function giveBishopHighlightIds(id) {
   let finalReturnArray = [];
 
@@ -118,4 +183,5 @@ function giveBishopHighlightIds(id) {
 export {
   checkPieceOfOpponentOnElement, checkSquareCaptureId,
   checkWhetherPieceExistsOrNot,giveBishopHighlightIds,
+  RooksHlts,
 };
