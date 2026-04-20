@@ -47,6 +47,42 @@ function checkSquareCaptureId(array) {
   return returnArray;
 }
 
+function Knight_Hlts(id){
+  let finalArray = [];
+
+  function top(){
+    let alpha = id[0];
+    let num = Number(id[1]);
+    let resultArray = [];
+
+    while(alpha=='a' && num <=2){
+      alpha = String.fromCharCode(alpha.charCodeAt(0) - 1);
+      num = num + 2;
+      resultArray.push(`${alpha}${num}`);
+    }
+  }
+
+  function bottom(){
+    let alpha = id[0];
+    let num = Number(id[1]);
+    let resultArray = [];
+
+    while(alpha=='a' && num <=2){
+      alpha = String.fromCharCode(alpha.charCodeAt(0) - 1);
+      num = num + 2;
+      resultArray.push(`${alpha}${num}`);
+    }
+  }
+
+  function left(){
+
+  }
+
+  function right(){
+
+  }
+}
+
 function RooksHlts(id){
     let finalReturnArray = [];
 
@@ -109,6 +145,7 @@ function RooksHlts(id){
     left: left(id),
   };
 }
+
 function giveBishopHighlightIds(id) {
   let finalReturnArray = [];
 
@@ -180,5 +217,5 @@ function giveBishopHighlightIds(id) {
 export {
   checkPieceOfOpponentOnElement, checkSquareCaptureId,
   checkWhetherPieceExistsOrNot,giveBishopHighlightIds,
-  RooksHlts,
+  RooksHlts,Knight_Hlts,
 };

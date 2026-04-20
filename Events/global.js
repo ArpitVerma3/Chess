@@ -6,7 +6,7 @@ import { giveBishopHighlightIds, checkSquareCaptureId, checkPieceOfOpponentOnEle
 
 import { globalStateRender, moveElement } from "../Render/main.js";
 import { globalState, keySquareMapper } from "../index.js";
-import { RooksHlts } from "../Helper/commonHelper.js";
+import { RooksHlts, Knight_Hlts } from "../Helper/commonHelper.js";
 
 // import { clearPreviousSelfHighlight } from "../Render/main.js";
 
@@ -506,6 +506,9 @@ function blackRookClk(square){
   globalStateRender();
 }
 
+function whiteKnightClk(){
+  
+}
 function GlobalEvent() {
   ROOT_DIV.addEventListener("click", function (event) {
     if (event.target.localName === "img") {
