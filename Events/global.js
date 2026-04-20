@@ -6,6 +6,7 @@ import { giveBishopHighlightIds, checkSquareCaptureId, checkPieceOfOpponentOnEle
 
 import { globalStateRender, moveElement } from "../Render/main.js";
 import { globalState, keySquareMapper } from "../index.js";
+import { RooksHlts } from "../Helper/commonHelper.js";
 
 // import { clearPreviousSelfHighlight } from "../Render/main.js";
 
@@ -378,22 +379,22 @@ function whiteRookClk(square){
   const current_pos = piece.current_position;
   const flatArray = globalState.flat();
 
-  let highlightSquareIds = giveBishopHighlightIds(current_pos);
+  let highlightSquareIds = RooksHlts(current_pos);
   let temp = [];
 
-  const {bottomLeft, topLeft, bottomRight, topRight } = highlightSquareIds;
+  const {bottom, top, right, left } = highlightSquareIds;
 
   let result = [];
-  result.push(checkSquareCaptureId(bottomLeft));
-  result.push(checkSquareCaptureId(topLeft));
-  result.push(checkSquareCaptureId(bottomRight));
-  result.push(checkSquareCaptureId(topRight));
+  result.push(checkSquareCaptureId(bottom));
+  result.push(checkSquareCaptureId(top));
+  result.push(checkSquareCaptureId(right));
+  result.push(checkSquareCaptureId(left));
 
   // insert into temp
-  temp.push(bottomLeft);
-  temp.push(topLeft);
-  temp.push(bottomRight);
-  temp.push(topRight);
+  temp.push(bottom);
+  temp.push(top);
+  temp.push(right);
+  temp.push(left);
 
   highlightSquareIds = result.flat();
 
@@ -456,22 +457,22 @@ function blackRookClk(square){
   const current_pos = piece.current_position;
   const flatArray = globalState.flat();
 
-  let highlightSquareIds = giveBishopHighlightIds(current_pos);
+  let highlightSquareIds = RooksHlts(current_pos);
   let temp = [];
 
-  const {bottomLeft, topLeft, bottomRight, topRight } = highlightSquareIds;
+  const {bottom, top,right, left} = highlightSquareIds;
 
   let result = [];
-  result.push(checkSquareCaptureId(bottomLeft));
-  result.push(checkSquareCaptureId(topLeft));
-  result.push(checkSquareCaptureId(bottomRight));
-  result.push(checkSquareCaptureId(topRight));
+  result.push(checkSquareCaptureId(bottom));
+  result.push(checkSquareCaptureId(top));
+  result.push(checkSquareCaptureId(right));
+  result.push(checkSquareCaptureId(left));
 
   // insert into temp
-  temp.push(bottomLeft);
-  temp.push(topLeft);
-  temp.push(bottomRight);
-  temp.push(topRight);
+  temp.push(bottom);
+  temp.push(top);
+  temp.push(right);
+  temp.push(left);
 
   highlightSquareIds = result.flat();
 
@@ -492,12 +493,12 @@ function blackRookClk(square){
       if (
         checkPieceResult &&
         checkPieceResult.piece &&
-        checkPieceResult.piece.piece_name.toLowerCase().includes("white")
+        checkPieceResult.piece.piece_name.toLowerCase().includes("black")
       ) {
         break;
       }
 
-      if (checkPieceOfOpponentOnElement(element, "white")) {
+      if (checkPieceOfOpponentOnElement(element, "black")) {
         break;
       }
     }

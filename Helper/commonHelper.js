@@ -47,7 +47,7 @@ function checkSquareCaptureId(array) {
   return returnArray;
 }
 
-function RooksHlts(){
+function RooksHlts(id){
     let finalReturnArray = [];
 
   function top(id) {
@@ -68,8 +68,7 @@ function RooksHlts(){
     let num = Number(id[1]);
     let resultArray = [];
 
-    while (alpha != "a" && num != 1) {
-      alpha = String.fromCharCode(alpha.charCodeAt(0) - 1);
+    while (num != 1) {
       num = num - 1;
       resultArray.push(`${alpha}${num}`);
     }
@@ -82,9 +81,8 @@ function RooksHlts(){
     let num = Number(id[1]);
     let resultArray = [];
 
-    while (alpha != "h" && num != 8) {
+    while (alpha != "h") {
       alpha = String.fromCharCode(alpha.charCodeAt(0) + 1);
-      num = num + 1;
       resultArray.push(`${alpha}${num}`);
     }
 
@@ -96,9 +94,8 @@ function RooksHlts(){
     let num = Number(id[1]);
     let resultArray = [];
 
-    while (alpha != "h" && num != 1) {
-      alpha = String.fromCharCode(alpha.charCodeAt(0) + 1);
-      num = num - 1;
+    while (alpha != "a") {
+      alpha = String.fromCharCode(alpha.charCodeAt(0) - 1);
       resultArray.push(`${alpha}${num}`);
     }
 
@@ -106,10 +103,10 @@ function RooksHlts(){
   }
 
   return {
-    topLeft: top(id),
-    bottomLeft: bottom(id),
-    topRight: right(id),
-    bottomRight: left(id),
+    top: top(id),
+    bottom: bottom(id),
+    right: right(id),
+    left: left(id),
   };
 }
 function giveBishopHighlightIds(id) {
