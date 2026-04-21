@@ -49,38 +49,151 @@ function checkSquareCaptureId(array) {
 
 function Knight_Hlts(id){
   let finalArray = [];
+  if(!id)return;
 
+  function left(){
+    let alpha = id[0];
+    let num = Number(id[1]);
+
+    let temp=0;
+    let resultArray = [];
+
+    while(alpha!='a'){
+      if(temp>=2)break;
+      alpha = String.fromCharCode(alpha.charCodeAt(0) - 1);
+
+      resultArray.push(`${alpha}${num}`);
+      temp++;
+    }
+    if(resultArray.length==2){
+      let finalArray1=[];
+
+      const lastEle=resultArray[resultArray.length-1];
+      let numba=Number(lastEle[1]);
+
+      if(numba<8){
+        finalArray1.push(`${alpha}${numba-1}`);
+      }
+      if(numba>1){
+        finalArray1.push(`${alpha}${numba+ 1}`)
+      }
+      return finalArray1;
+     
+    }
+    else{
+      return [];
+    }
+  }
+  
+  function right(){
+    let alpha = id[0];
+    let num = Number(id[1]);
+
+    let temp=0;
+    let resultArray = [];
+
+    while(alpha!='h'){
+      if(temp>=2)break;
+      alpha = String.fromCharCode(alpha.charCodeAt(0) + 1);
+
+      resultArray.push(`${alpha}${num}`);
+      temp++;
+    }
+    if(resultArray.length==2){
+      let finalArray1=[];
+
+      const lastEle=resultArray[resultArray.length-1];
+      let numba=Number(lastEle[1]);
+
+      if(numba<8){
+        finalArray1.push(`${alpha}${numba-1}`);
+      }
+      if(numba>1){
+        finalArray1.push(`${alpha}${numba+ 1}`)
+      }
+      return finalArray1;
+     
+    }
+    else{
+      return [];
+    }
+  }
+ 
+ function bottom(){
+    let alpha = id[0];
+    let num = Number(id[1]);
+
+    let temp=0;
+    let resultArray = [];
+
+    while(num!=1){
+      if(temp>=2)break;
+
+      num--;
+
+      resultArray.push(`${alpha}${num}`);
+      temp++;
+    }
+    if(resultArray.length==2){
+      let finalArray1=[];
+      const lastEle=resultArray[resultArray.length-1];
+
+      let alpha1=lastEle[0];
+      let numba=Number(lastEle[1]);
+
+      if(alpha1 != "h"){
+        finalArray1.push(`${String.fromCharCode(alpha1.charCodeAt(0) + 1)}${numba}`);
+      }
+      if(alpha1 != "a"){
+        finalArray1.push(`${String.fromCharCode(alpha1.charCodeAt(0) - 1)}${numba}`);
+      }
+      return finalArray1;
+     
+    }
+    else{
+      return [];
+    }
+ }
+ 
   function top(){
     let alpha = id[0];
     let num = Number(id[1]);
+
+    let temp=0;
     let resultArray = [];
 
-    while(alpha=='a' && num <=2){
-      alpha = String.fromCharCode(alpha.charCodeAt(0) - 1);
-      num = num + 2;
+    while(num!=8){
+      if(temp>=2)break;
+
+      num++;
+
       resultArray.push(`${alpha}${num}`);
+      temp++;
+    }
+    if(resultArray.length==2){
+      let finalArray1=[];
+      const lastEle=resultArray[resultArray.length-1];
+
+      let alpha1=lastEle[0];
+      let numba=Number(lastEle[1]);
+
+      if(alpha1 != "h"){
+        finalArray1.push(`${String.fromCharCode(alpha1.charCodeAt(0) + 1)}${numba}`);
+      }
+      if(alpha1 != "a"){
+        finalArray1.push(`${String.fromCharCode(alpha1.charCodeAt(0) - 1)}${numba}`);
+      }
+      return finalArray1;
+     
+    }
+    else{
+      return [];
     }
   }
 
-  function bottom(){
-    let alpha = id[0];
-    let num = Number(id[1]);
-    let resultArray = [];
-
-    while(alpha=='a' && num <=2){
-      alpha = String.fromCharCode(alpha.charCodeAt(0) - 1);
-      num = num + 2;
-      resultArray.push(`${alpha}${num}`);
-    }
-  }
-
-  function left(){
-
-  }
-
-  function right(){
-
-  }
+  return [...top(), ...right(),
+    ...bottom(), ...left()
+  ];
 }
 
 function RooksHlts(id){

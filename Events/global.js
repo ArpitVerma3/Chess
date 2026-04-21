@@ -11,11 +11,11 @@ import { RooksHlts, Knight_Hlts } from "../Helper/commonHelper.js";
 // import { clearPreviousSelfHighlight } from "../Render/main.js";
 
 let highlight_state = false;
-
 let selfHighlightState = null;
 
-// in move state or not
 let moveState = null;
+
+console.log(Knight_Hlts("e2"));
 
 function clearHighlightLocal() {
   clearHighlight();
@@ -26,6 +26,64 @@ function movePieceFromXToY(from, to) {
   to.piece = from.piece;
   from.piece = null;
   globalStateRender();
+}
+
+function whiteKnightClk(square){
+   const piece = square.piece;
+
+  if (piece == selfHighlightState) {
+    clearPreviousSelfHighlight(selfHighlightState);
+    clearHighlightLocal();
+    return;
+  }
+
+  if (square.captureHighlight) {
+    // movePieceFromXToY();
+    moveElement(selfHighlightState, piece.current_position);
+    clearPreviousSelfHighlight(selfHighlightState);
+    clearHighlightLocal();
+    return;
+  }
+  clearPreviousSelfHighlight(selfHighlightState);
+  clearHighlightLocal();
+
+  // highlighting logic
+  selfHighlight(piece);
+  highlight_state = true;
+  selfHighlightState = piece;
+
+  moveState = piece;
+
+  const current_pos = piece.current_position;
+  const flatArray = globalState.flat();
+
+  let highlightSquareIds = Knight_Hlts(current_pos);
+
+  // Filter out squares with own pieces
+  highlightSquareIds = highlightSquareIds.filter((id) => {
+    const element = keySquareMapper[id];
+    if (!element || !element.piece) return true;
+    return !element.piece.piece_name.toLowerCase().includes("white");
+  });
+
+  highlightSquareIds.forEach((highlight) => {
+    const element = keySquareMapper[highlight];
+    if (element) {
+      element.highlight = true;
+    }
+  });
+
+  let captureIds = [];
+
+  highlightSquareIds.forEach(element => {
+    checkPieceOfOpponentOnElement(element, "white");
+  });
+
+  globalStateRender();
+}
+
+function blackKnightClk(){
+  
 }
 
 function whitePawnClick(square) {
@@ -506,9 +564,6 @@ function blackRookClk(square){
   globalStateRender();
 }
 
-function whiteKnightClk(){
-  
-}
 function GlobalEvent() {
   ROOT_DIV.addEventListener("click", function (event) {
     if (event.target.localName === "img") {
@@ -533,6 +588,12 @@ function GlobalEvent() {
       }
       else if (square.piece.piece_name == "White_Rook") {
         whiteRookClk(square);
+      }
+      else if (square.piece.piece_name == "White_Knight") {
+        whiteKnightClk(square);
+      }
+      else if (square.piece.piece_name == "Black_Knight") {
+        blackKnightClk(square);
       }
     } else {
       const childElementsOfclickedEl = Array.from(event.target.childNodes);
