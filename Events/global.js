@@ -6,7 +6,7 @@ import { giveBishopHighlightIds, checkSquareCaptureId, checkPieceOfOpponentOnEle
 
 import { globalStateRender, moveElement } from "../Render/main.js";
 import { globalState, keySquareMapper } from "../index.js";
-import { RooksHlts, Knight_Hlts } from "../Helper/commonHelper.js";
+import { RooksHlts, Knight_Hlts, Queen_Charge } from "../Helper/commonHelper.js";
 
 // import { clearPreviousSelfHighlight } from "../Render/main.js";
 
@@ -371,6 +371,153 @@ function blackBishopClick(square) {
   globalStateRender();
 }
 
+function whiteQueenClk(square) {
+  const piece = square.piece;
+
+  if (piece == selfHighlightState) {
+    clearPreviousSelfHighlight(selfHighlightState);
+    clearHighlightLocal();
+    return;
+  }
+
+  if (square.captureHighlight) {
+    // movePieceFromXToY();
+    moveElement(selfHighlightState, piece.current_position);
+    clearPreviousSelfHighlight(selfHighlightState);
+    clearHighlightLocal();
+    return;
+  }
+  clearPreviousSelfHighlight(selfHighlightState);
+  clearHighlightLocal();
+
+  // highlighting logic
+  selfHighlight(piece);
+  highlight_state = true;
+  selfHighlightState = piece;
+
+  moveState = piece;
+
+  const current_pos = piece.current_position;
+  const flatArray = globalState.flat();
+
+  let highlightSquareIds = Queen_Charge(current_pos);
+
+  const {bottomLeft, topLeft, bottomRight, topRight,
+    top, bottom, left, right
+   } = highlightSquareIds;
+
+  const directions = [bottomLeft, topLeft, bottomRight, topRight,
+    bottom, top, right, left];
+  const result = directions.map(checkSquareCaptureId);
+  
+  const temp = [bottom, top, right, left, bottomLeft, topLeft, bottomRight, topRight];
+  highlightSquareIds = result.flat();
+
+  highlightSquareIds.forEach((highlight) => {
+    const element = keySquareMapper[highlight];
+    if (element) {
+      element.highlight = true;
+    }
+  });
+
+  let captureIds = [];
+
+  for (let index = 0; index < temp.length; index++) {
+    const arr = temp[index];
+
+    for (let j = 0; j < arr.length; j++) {
+      const element = arr[j];
+
+      let checkPieceResult = checkWhetherPieceExistsOrNot(element);
+      if (
+        checkPieceResult &&
+        checkPieceResult.piece &&
+        checkPieceResult.piece.piece_name.toLowerCase().includes("white")
+      ) {
+        break;
+      }
+
+      if (checkPieceOfOpponentOnElement(element, "white")) {
+        break;
+      }
+    }
+  }
+  globalStateRender();
+}
+
+function blackQueenClk(square) {
+  const piece = square.piece;
+
+  if (piece == selfHighlightState) {
+    clearPreviousSelfHighlight(selfHighlightState);
+    clearHighlightLocal();
+    return;
+  }
+
+  if (square.captureHighlight) {
+    // movePieceFromXToY();
+    moveElement(selfHighlightState, piece.current_position);
+    clearPreviousSelfHighlight(selfHighlightState);
+    clearHighlightLocal();
+    return;
+  }
+  clearPreviousSelfHighlight(selfHighlightState);
+  clearHighlightLocal();
+
+  // highlighting logic
+  selfHighlight(piece);
+  highlight_state = true;
+  selfHighlightState = piece;
+
+  moveState = piece;
+
+  const current_pos = piece.current_position;
+  const flatArray = globalState.flat();
+
+  let highlightSquareIds = Queen_Charge(current_pos);
+
+  const {bottomLeft, topLeft, bottomRight, topRight,
+    top, bottom, left, right
+   } = highlightSquareIds;
+
+  const directions = [bottomLeft, topLeft, bottomRight, topRight,
+    bottom, top, right, left];
+  const result = directions.map(checkSquareCaptureId);
+  
+  const temp = [bottom, top, right, left, bottomLeft, topLeft, bottomRight, topRight];
+  highlightSquareIds = result.flat();
+
+  highlightSquareIds.forEach((highlight) => {
+    const element = keySquareMapper[highlight];
+    if (element) {
+      element.highlight = true;
+    }
+  });
+
+  let captureIds = [];
+
+  for (let index = 0; index < temp.length; index++) {
+    const arr = temp[index];
+
+    for (let j = 0; j < arr.length; j++) {
+      const element = arr[j];
+
+      let checkPieceResult = checkWhetherPieceExistsOrNot(element);
+      if (
+        checkPieceResult &&
+        checkPieceResult.piece &&
+        checkPieceResult.piece.piece_name.toLowerCase().includes("black")
+      ) {
+        break;
+      }
+
+      if (checkPieceOfOpponentOnElement(element, "black")) {
+        break;
+      }
+    }
+  }
+  globalStateRender();
+}
 // black pawn function
 function blackPawnClick(square) {
   // clear board for any previous highlight
@@ -644,6 +791,12 @@ function GlobalEvent() {
       }
       else if (square.piece.piece_name == "Black_Knight") {
         blackKnightClk(square);
+      }
+      else if (square.piece.piece_name == "White_Queen") {
+        whiteQueenClk(square);
+      }
+      else if (square.piece.piece_name == "Black_Queen") {
+        blackQueenClk(square);
       }
     } else {
       const childElementsOfclickedEl = Array.from(event.target.childNodes);

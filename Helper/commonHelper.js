@@ -353,8 +353,25 @@ function giveBishopHighlightIds(id) {
   };
 }
 
+function Queen_Charge(id){
+  const files = RooksHlts(id);
+  const diag = giveBishopHighlightIds(id);
+
+  return {
+    "left" : files.left,
+    "right" : files.right,
+    "top" : files.top,
+    "bottom" : files.bottom,
+
+    "topLeft" : diag.topLeft,
+    "topRight" : diag.topRight,
+    "bottomLeft" : diag.bottomLeft,
+    "bottomRight" : diag.bottomRight,
+  };
+}
+
 export {
   checkPieceOfOpponentOnElement, checkSquareCaptureId,
   checkWhetherPieceExistsOrNot,giveBishopHighlightIds,
-  RooksHlts,Knight_Hlts,
+  RooksHlts,Knight_Hlts,Queen_Charge,
 };
