@@ -82,8 +82,58 @@ function whiteKnightClk(square){
   globalStateRender();
 }
 
-function blackKnightClk(){
-  
+function blackKnightClk(square){
+   const piece = square.piece;
+
+  if (piece == selfHighlightState) {
+    clearPreviousSelfHighlight(selfHighlightState);
+    clearHighlightLocal();
+    return;
+  }
+
+  if (square.captureHighlight) {
+    // movePieceFromXToY();
+    moveElement(selfHighlightState, piece.current_position);
+    clearPreviousSelfHighlight(selfHighlightState);
+    clearHighlightLocal();
+    return;
+  }
+  clearPreviousSelfHighlight(selfHighlightState);
+  clearHighlightLocal();
+
+  // highlighting logic
+  selfHighlight(piece);
+  highlight_state = true;
+  selfHighlightState = piece;
+
+  moveState = piece;
+
+  const current_pos = piece.current_position;
+  const flatArray = globalState.flat();
+
+  let highlightSquareIds = Knight_Hlts(current_pos);
+
+  // Filter out squares with own pieces
+  highlightSquareIds = highlightSquareIds.filter((id) => {
+    const element = keySquareMapper[id];
+    if (!element || !element.piece) return true;
+    return !element.piece.piece_name.toLowerCase().includes("black");
+  });
+
+  highlightSquareIds.forEach((highlight) => {
+    const element = keySquareMapper[highlight];
+    if (element) {
+      element.highlight = true;
+    }
+  });
+
+  let captureIds = [];
+
+  highlightSquareIds.forEach(element => {
+    checkPieceOfOpponentOnElement(element, "black");
+  });
+
+  globalStateRender();
 }
 
 function whitePawnClick(square) {
