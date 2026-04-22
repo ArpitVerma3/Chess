@@ -370,8 +370,37 @@ function Queen_Charge(id){
   };
 }
 
+function King_Logic(id){
+  const files = RooksHlts(id);
+  const diag = giveBishopHighlightIds(id);
+
+  const res = {
+    "left" : files.left,
+    "right" : files.right,
+    "top" : files.top,
+    "bottom" : files.bottom,
+
+    "topLeft" : diag.topLeft,
+    "topRight" : diag.topRight,
+    "bottomLeft" : diag.bottomLeft,
+    "bottomRight" : diag.bottomRight,
+  };
+
+  for (const key in res) {
+    if (!Object.hasOwn(res, key)) continue;
+    
+    const element = res[key];
+    
+    if(element.length != 0){
+      res[key]=new Array(element[0]);
+
+    }
+  }
+  return res;
+}
+
 export {
   checkPieceOfOpponentOnElement, checkSquareCaptureId,
   checkWhetherPieceExistsOrNot,giveBishopHighlightIds,
-  RooksHlts,Knight_Hlts,Queen_Charge,
+  RooksHlts,Knight_Hlts,Queen_Charge,King_Logic
 };
