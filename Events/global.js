@@ -9,6 +9,7 @@ import { globalState, keySquareMapper } from "../index.js";
 
 import { RooksHlts, Knight_Hlts, Queen_Charge } from "../Helper/commonHelper.js";
 import { King_Logic } from "../Helper/commonHelper.js";
+import { globalPiece } from "../Render/main.js";
 
 // import { clearPreviousSelfHighlight } from "../Render/main.js";
 
@@ -17,8 +18,6 @@ let selfHighlightState = null;
 
 let currTurn="white";
 let moveState = null;
-
-console.log(Knight_Hlts("e2"));
 
 function clearHighlightLocal() {
   clearHighlight();
@@ -33,6 +32,19 @@ function movePieceFromXToY(from, to) {
 
 function flipTurn(){
   currTurn = currTurn === "white" ? "black" : "white";
+}
+
+function King_Under_Attack(){
+  if(currTurn==="white"){
+    const whiteKingPos=globalPiece.whiteKing.current_position;
+    console.log(whiteKingPos);
+    
+  }
+  else {
+    const blackKingPos=globalPiece.blackKing.current_position;
+    console.log(blackKingPos);
+
+  }
 }
 
 function inTurnCapture(square){
@@ -55,6 +67,8 @@ function inTurnCapture(square){
 // move element to square with id
 function moveElement(piece, id) {
   flipTurn();
+  King_Under_Attack();
+
   const flatData = globalState.flat();
   flatData.forEach((el) => {
     if (el.id == piece.current_position) {
