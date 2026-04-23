@@ -105,25 +105,12 @@ function initGameRender(data) {
       // render black queen
       if (square.id == "d8") {
         square.piece = piece.blackQueen(square.id);
-        
-        if(globalPiece.Black_Queen_1){
-          globalPiece.Black_Queen_2=square.piece;
-        }
-        else{
-          globalPiece.Black_Queen_1=square.piece;
-        }
-
+        globalPiece.Black_Queen=square.piece;
       }
       // render black king
       if (square.id == "e8") {
         square.piece = piece.blackKing(square.id);
-        
-        if(globalPiece.Black_King_1){
-          globalPiece.Black_King_2=square.piece;
-        }
-        else{
-          globalPiece.Black_King_1=square.piece;
-        }
+        globalPiece.Black_King=square.piece;
       }
 
       // render white pawn
@@ -135,22 +122,12 @@ function initGameRender(data) {
       // render white queen
       if (square.id == "d1") {
         square.piece = piece.whiteQueen(square.id);
-        if(globalPiece.White_Queen_1){
-          globalPiece.White_Queen_2=square.piece;
-        }
-        else{
-          globalPiece.White_Queen_1=square.piece;
-        }
+        globalPiece.White_Queen = square.piece;
       }
       // render white king
       if (square.id == "e1") {
         square.piece = piece.whiteKing(square.id);
-        if(globalPiece.White_King_1){
-          globalPiece.White_King_2=square.piece;
-        }
-        else{
-          globalPiece.White_King_1=square.piece;
-        }
+        globalPiece.White_King=square.piece;
       }
 
       // render white rook

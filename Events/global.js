@@ -37,8 +37,19 @@ function flipTurn(){
 function King_Under_Attack(){
   if(currTurn==="white"){
     const whiteKingPos=globalPiece.whiteKing.current_position;
-    console.log(whiteKingPos);
     
+    const knight1=globalPiece.Black_Knight_1;
+    const knight2=globalPiece.Black_Knight_2;
+
+    const king=globalPiece.Black_King;
+    const queen=globalPiece.Black_Queen;
+
+    const bishop1=globalPiece.Black_Bishop_1;
+    const bishop2=globalPiece.Black_Bishop_2;
+
+    const rook1=globalPiece.Black_Rook_1;
+    const rook2=globalPiece.Black_Rook_2;
+
   }
   else {
     const blackKingPos=globalPiece.blackKing.current_position;
@@ -75,12 +86,16 @@ function moveElement(piece, id) {
       delete el.piece;
     }
     if (el.id == id) {
-      el.piece = piece;
+      if(el.piece){
+        el.piece.current_position=null;
+      }
     }
   });
   clearHighlight();
 
   const previousPiece = document.getElementById(piece.current_position);
+  piece.current_position=null;
+
   previousPiece.classList.remove("highlightYellow");
 
   const currentPiece = document.getElementById(id);
@@ -88,7 +103,8 @@ function moveElement(piece, id) {
 
   previousPiece.innerHTML = "";
   piece.current_position = id;
-  // globalStateRender();
+
+  King_Under_Attack();
 }
 function whiteKnightClk(square){
   const piece = square.piece;
