@@ -61,7 +61,7 @@ function initGameRender(data) {
       // render blackpawn
       if (square.id[1] == 7) {
         square.piece = piece.blackPawn(square.id);
-        // globalPiece.Black_Pawn = square.piece;
+        globalPiece.Black_Pawn = square.piece;
       }
 
       // render black rook
@@ -116,7 +116,7 @@ function initGameRender(data) {
       // render white pawn
       if (square.id[1] == 2) {
         square.piece = piece.whitePawn(square.id);
-        // globalPiece.White_Pawn = square.piece;
+        globalPiece.White_Pawn = square.piece;
 
       }
       // render white queen

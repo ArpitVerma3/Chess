@@ -8,7 +8,10 @@ import { globalStateRender} from "../Render/main.js";
 import { globalState, keySquareMapper } from "../index.js";
 
 import { RooksHlts, Knight_Hlts, Queen_Charge } from "../Helper/commonHelper.js";
-import { King_Logic } from "../Helper/commonHelper.js";
+import { King_Logic ,Knight_Capture_Ids} from "../Helper/commonHelper.js";
+
+import { giveKingCaptureIds, giveQueenCapturesIds } from "../Helper/commonHelper.js";
+import { giveRookCapturesIds, giveBishopCaptureIds } from "../Helper/commonHelper.js";
 import { globalPiece } from "../Render/main.js";
 
 // import { clearPreviousSelfHighlight } from "../Render/main.js";
@@ -34,29 +37,68 @@ function flipTurn(){
   currTurn = currTurn === "white" ? "black" : "white";
 }
 
-function King_Under_Attack(){
-  if(currTurn==="white"){
-    const whiteKingPos=globalPiece.whiteKing.current_position;
-    
-    const knight1=globalPiece.Black_Knight_1;
-    const knight2=globalPiece.Black_Knight_2;
+function King_Under_Attack() {
+  if (currTurn === "black") {
+    const whiteKingCurrentPosition = globalPiece.White_King.current_position;
+    const knight_1 = globalPiece.Black_Knight_1.current_position;
+    const knight_2 = globalPiece.Black_Knight_2.current_position;
+    const king = globalPiece.Black_King.current_position;
+    const bishop_1 = globalPiece.Black_Bishop_1.current_position;
+    const bishop_2 = globalPiece.Black_Bishop_2.current_position;
+    const rook_1 = globalPiece.Black_Rook_1.current_position;
+    const rook_2 = globalPiece.Black_Rook_2.current_position;
+    const queen = globalPiece.Black_Queen.current_position;
 
-    const king=globalPiece.Black_King;
-    const queen=globalPiece.Black_Queen;
+    let finalCheckList = [];
+    finalCheckList.push(giveKnightCaptureIds(knight_1, currTurn));
+    finalCheckList.push(giveKnightCaptureIds(knight_2, currTurn));
+    finalCheckList.push(giveKingCaptureIds(king, currTurn));
+    finalCheckList.push(giveBishopCaptureIds(bishop_1, currTurn));
+    finalCheckList.push(giveBishopCaptureIds(bishop_2, currTurn));
+    finalCheckList.push(giveRookCapturesIds(rook_1, currTurn));
+    finalCheckList.push(giveRookCapturesIds(rook_2, currTurn));
+    finalCheckList.push(giveQueenCapturesIds(queen, currTurn));
 
-    const bishop1=globalPiece.Black_Bishop_1;
-    const bishop2=globalPiece.Black_Bishop_2;
+    finalCheckList = finalCheckList.flat();
+    const checkOrNot = finalCheckList.find(
+      (element) => element === whiteKingCurrentPosition
+    );
 
-    const rook1=globalPiece.Black_Rook_1;
-    const rook2=globalPiece.Black_Rook_2;
+    if (checkOrNot) {
+      whoInCheck = "white";
+    }
+  } else {
+    const blackKingCurrentPosition = globalPiece.black_king.current_position;
+    const knight_1 = globalPiece.White_Knight_1.current_position;
+    const knight_2 = globalPiece.White_Knight_2.current_position;
+    const king = globalPiece.White_King.current_position;
+    const bishop_1 = globalPiece.White_Bishop_1.current_position;
+    const bishop_2 = globalPiece.White_Bishop_2.current_position;
+    const rook_1 = globalPiece.White_Rook_1.current_position;
+    const rook_2 = globalPiece.White_Rook_2.current_position;
+    const queen = globalPiece.White_Queen.current_position;
 
-  }
-  else {
-    const blackKingPos=globalPiece.blackKing.current_position;
-    console.log(blackKingPos);
+    let finalCheckList = [];
+    finalCheckList.push(giveKnightCaptureIds(knight_1, currTurn));
+    finalCheckList.push(giveKnightCaptureIds(knight_2, currTurn));
+    finalCheckList.push(giveKingCaptureIds(king, currTurn));
+    finalCheckList.push(giveBishopCaptureIds(bishop_1, currTurn));
+    finalCheckList.push(giveBishopCaptureIds(bishop_2, currTurn));
+    finalCheckList.push(giveRookCapturesIds(rook_1, currTurn));
+    finalCheckList.push(giveRookCapturesIds(rook_2, currTurn));
+    finalCheckList.push(giveQueenCapturesIds(queen, currTurn));
 
+    finalCheckList = finalCheckList.flat();
+    const checkOrNot = finalCheckList.find(
+      (element) => element === blackKingCurrentPosition
+    );
+
+    if (checkOrNot) {
+      whoInCheck = "black";
+    }
   }
 }
+
 
 function inTurnCapture(square){
   const piece = square.piece;

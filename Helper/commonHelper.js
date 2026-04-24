@@ -19,6 +19,19 @@ function checkPieceOfOpponentOnElement(id, color) {
   return false;
 }
 
+function checkPieceOfOpponentOnElementNoDom(id, color) {
+  const opponentColor = color === "white" ? "Black" : "White";
+
+  const element = keySquareMapper[id];
+
+  if (!element) return false;
+
+  if (element.piece && element.piece.piece_name.includes(opponentColor)) {
+    return true;
+  }
+
+  return false;
+}
 // function to check whether piece exists or not by square-id
 function checkWhetherPieceExistsOrNot(squareId) {
   const square = keySquareMapper[squareId];
@@ -221,6 +234,37 @@ function Knight_Hlts(id) {
   return moves;
 }
 
+function Knight_Capture_Ids(id) {
+  if (!id) return [];
+
+  let alpha = id[0];
+  let num = Number(id[1]);
+
+  const offsets = [
+    [2, 1], [2, -1],
+    [-2, 1], [-2, -1],
+    [1, 2], [1, -2],
+    [-1, 2], [-1, -2]
+  ];
+
+  let moves = [];
+
+  for (let [dx, dy] of offsets) {
+    let newAlpha = String.fromCharCode(alpha.charCodeAt(0) + dx);
+    let newNum = num + dy;
+
+    if (newAlpha >= 'a' && newAlpha <= 'h' && newNum >= 1 && newNum <= 8) {
+      moves.push(`${newAlpha}${newNum}`);
+    }
+  }
+  moves=moves.filter(element =>{
+    if(checkPieceOfOpponentOnElementNoDom(element, "black")){
+      return true;
+    }
+
+  })
+  return moves;
+}
 
 function RooksHlts(id){
     let finalReturnArray = [];
@@ -370,6 +414,107 @@ function Queen_Charge(id){
   };
 }
 
+function giveBishopCaptureIds(id, color){
+
+  if(!id){
+    return [];
+  }
+
+  let hightlightSquareIds = giveBishopHighlightIds(id);
+
+  let temp = [];
+  const { bottomLeft, topLeft, bottomRight, topRight } = hightlightSquareIds;
+  let returnArr = [];
+
+  // insert into temp
+  temp.push(bottomLeft);
+  temp.push(topLeft);
+  temp.push(bottomRight);
+  temp.push(topRight);
+  
+  for (let index = 0; index < temp.length; index++) {
+    const arr = temp[index];
+
+    for (let j = 0; j < arr.length; j++) {
+      const element = arr[j];
+
+      let checkPieceResult = checkWhetherPieceExistsOrNot(element);
+      if (
+        checkPieceResult &&
+        checkPieceResult.piece &&
+        checkPieceResult.piece.piece_name.toLowerCase().includes(color)
+      ) {
+        break;
+      }
+
+      if (checkPieceOfOpponentOnElementNoDom(element, color)) {
+        returnArr.push(element)
+        break;
+      }
+    }
+  }
+
+ 
+  return returnArr;
+
+}
+
+function giveRookCapturesIds(id,color){
+
+  if(!id)
+  {
+    return [];
+  }
+
+  let hightlightSquareIds = RooksHlts(id);
+
+  let temp = [];
+  const { bottom, top, right, left } = hightlightSquareIds;
+  let returnArr = [];
+
+  // insert into temp
+  temp.push(bottom);
+  temp.push(top);
+  temp.push(right);
+  temp.push(left);
+  
+  for (let index = 0; index < temp.length; index++) {
+    const arr = temp[index];
+
+    for (let j = 0; j < arr.length; j++) {
+      const element = arr[j];
+
+      let checkPieceResult = checkWhetherPieceExistsOrNot(element);
+      if (
+        checkPieceResult &&
+        checkPieceResult.piece &&
+        checkPieceResult.piece.piece_name.toLowerCase().includes(color)
+      ) {
+        break;
+      }
+
+      if (checkPieceOfOpponentOnElementNoDom(element, color)) {
+        returnArr.push(element)
+        break;
+      }
+    }
+  }
+
+  return returnArr;
+
+}
+
+function giveQueenCapturesIds(id,color){
+
+  if(!id) return [];
+
+  let returnArr = [];
+  returnArr.push(giveBishopCaptureIds(id, color))
+  returnArr.push(giveRookCapturesIds(id, color))
+  return returnArr.flat();
+}
+
+
 function King_Logic(id){
   const files = RooksHlts(id);
   const diag = giveBishopHighlightIds(id);
@@ -398,9 +543,27 @@ function King_Logic(id){
   }
   return res;
 }
+function giveKingCaptureIds(id, color){
 
+  if(!id) {
+    return [];
+  }
+
+  let result = Knight_Hlts(id);
+  result = Object.values(result).flat();
+  result = result.filter(element => {
+    if(checkPieceOfOpponentOnElementNoDom(element, color)){
+      return true;
+    }
+  })
+
+  return result;
+}
 export {
   checkPieceOfOpponentOnElement, checkSquareCaptureId,
   checkWhetherPieceExistsOrNot,giveBishopHighlightIds,
-  RooksHlts,Knight_Hlts,Queen_Charge,King_Logic
+  RooksHlts,Knight_Hlts,Queen_Charge,King_Logic,
+  Knight_Capture_Ids,giveBishopCaptureIds,
+  giveQueenCapturesIds, giveKingCaptureIds,
+  giveRookCapturesIds,
 };
