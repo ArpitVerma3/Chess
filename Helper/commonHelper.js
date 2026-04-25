@@ -234,36 +234,21 @@ function Knight_Hlts(id) {
   return moves;
 }
 
-function Knight_Capture_Ids(id) {
-  if (!id) return [];
-
-  let alpha = id[0];
-  let num = Number(id[1]);
-
-  const offsets = [
-    [2, 1], [2, -1],
-    [-2, 1], [-2, -1],
-    [1, 2], [1, -2],
-    [-1, 2], [-1, -2]
-  ];
-
-  let moves = [];
-
-  for (let [dx, dy] of offsets) {
-    let newAlpha = String.fromCharCode(alpha.charCodeAt(0) + dx);
-    let newNum = num + dy;
-
-    if (newAlpha >= 'a' && newAlpha <= 'h' && newNum >= 1 && newNum <= 8) {
-      moves.push(`${newAlpha}${newNum}`);
-    }
+function giveKnightCaptureIds(id,color) {
+  
+  if (!id) {
+    return [];
   }
-  moves=moves.filter(element =>{
-    if(checkPieceOfOpponentOnElementNoDom(element, "black")){
+
+  let returnArr  = Knight_Hlts(id);
+
+  returnArr = returnArr.filter(element => {
+    if(checkPieceOfOpponentOnElementNoDom(element, color)){
       return true;
     }
+  });
 
-  })
-  return moves;
+  return returnArr;
 }
 
 function RooksHlts(id){
@@ -549,7 +534,7 @@ function giveKingCaptureIds(id, color){
     return [];
   }
 
-  let result = Knight_Hlts(id);
+  let result = King_Logic(id);
   result = Object.values(result).flat();
   result = result.filter(element => {
     if(checkPieceOfOpponentOnElementNoDom(element, color)){
@@ -563,7 +548,7 @@ export {
   checkPieceOfOpponentOnElement, checkSquareCaptureId,
   checkWhetherPieceExistsOrNot,giveBishopHighlightIds,
   RooksHlts,Knight_Hlts,Queen_Charge,King_Logic,
-  Knight_Capture_Ids,giveBishopCaptureIds,
+  giveKnightCaptureIds,giveBishopCaptureIds,
   giveQueenCapturesIds, giveKingCaptureIds,
   giveRookCapturesIds,
 };

@@ -8,7 +8,7 @@ import { globalStateRender} from "../Render/main.js";
 import { globalState, keySquareMapper } from "../index.js";
 
 import { RooksHlts, Knight_Hlts, Queen_Charge } from "../Helper/commonHelper.js";
-import { King_Logic ,Knight_Capture_Ids} from "../Helper/commonHelper.js";
+import { King_Logic ,giveKnightCaptureIds} from "../Helper/commonHelper.js";
 
 import { giveKingCaptureIds, giveQueenCapturesIds } from "../Helper/commonHelper.js";
 import { giveRookCapturesIds, giveBishopCaptureIds } from "../Helper/commonHelper.js";
@@ -19,6 +19,7 @@ import { globalPiece } from "../Render/main.js";
 let highlight_state = false;
 let selfHighlightState = null;
 
+let whoInCheck=null;
 let currTurn="white";
 let moveState = null;
 
@@ -68,7 +69,7 @@ function King_Under_Attack() {
       whoInCheck = "white";
     }
   } else {
-    const blackKingCurrentPosition = globalPiece.black_king.current_position;
+    const blackKingCurrentPosition = globalPiece.Black_King.current_position;
     const knight_1 = globalPiece.White_Knight_1.current_position;
     const knight_2 = globalPiece.White_Knight_2.current_position;
     const king = globalPiece.White_King.current_position;
@@ -119,9 +120,7 @@ function inTurnCapture(square){
 }
 // move element to square with id
 function moveElement(piece, id) {
-  flipTurn();
-  King_Under_Attack();
-
+  
   const flatData = globalState.flat();
   flatData.forEach((el) => {
     if (el.id == piece.current_position) {
@@ -131,6 +130,7 @@ function moveElement(piece, id) {
       if(el.piece){
         el.piece.current_position=null;
       }
+      el.piece=piece;
     }
   });
   clearHighlight();
@@ -138,16 +138,20 @@ function moveElement(piece, id) {
   const previousPiece = document.getElementById(piece.current_position);
   piece.current_position=null;
 
-  previousPiece.classList.remove("highlightYellow");
+  previousPiece?.classList?.remove("highlightYellow");
 
   const currentPiece = document.getElementById(id);
-  currentPiece.innerHTML = previousPiece.innerHTML;
+  currentPiece.innerHTML = previousPiece?.innerHTML;
 
-  previousPiece.innerHTML = "";
+  if(previousPiece) previousPiece.innerHTML = "";
   piece.current_position = id;
 
   King_Under_Attack();
+  flipTurn();
+
 }
+
+
 function whiteKnightClk(square){
   const piece = square.piece;
 
@@ -1035,6 +1039,7 @@ function GlobalEvent() {
         inTurnCapture(square);
         return;
       }
+      
 
       if (square.piece.piece_name == "White_Pawn") {
         if(currTurn == "white")whitePawnClick(square);
