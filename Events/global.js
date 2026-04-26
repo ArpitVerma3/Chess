@@ -14,7 +14,7 @@ import { giveKingCaptureIds, giveQueenCapturesIds } from "../Helper/commonHelper
 import { giveRookCapturesIds, giveBishopCaptureIds } from "../Helper/commonHelper.js";
 import { globalPiece } from "../Render/main.js";
 
-// import { clearPreviousSelfHighlight } from "../Render/main.js";
+import Pawn_Promotion from "../Helper/modelCr.js"
 
 let highlight_state = false;
 let selfHighlightState = null;
@@ -121,6 +121,8 @@ function inTurnCapture(square){
 // move element to square with id
 function moveElement(piece, id) {
   
+  Pawn_Promotion("white");
+
   const flatData = globalState.flat();
   flatData.forEach((el) => {
     if (el.id == piece.current_position) {
