@@ -1,6 +1,16 @@
-## Overview
-This project is a JavaScript-based Chess application designed for both local and online multiplayer gameplay.
- It ensures every move follows official chess rules through robust validation logic, preventing illegal moves and maintaining game integrity. 
- The app aims to deliver a smooth, interactive experience with a clean UI, real-time updates for online matches, and a foundation for future enhancements like storing game history and advanced game analysis.
- Still incomplete.
- 4th april
+AV Chess Zero
+
+A fully functional chess application built from scratch using JavaScript, with complete rule enforcement and a clean, interactive user interface.
+
+All core game mechanics have been implemented manually, including:
+
+Legal move validation for all pieces
+Castling
+Pawn promotion
+Check and checkmate detection
+Restriction of illegal moves when the king is in check
+Move history tracking
+
+The project focuses on accurately modeling chess logic while providing a smooth and intuitive user experience. It demonstrates strong problem-solving, state management, and DOM manipulation skills.
+
+Future enhancements include features like multiplayer support and advanced game analysis.
