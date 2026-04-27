@@ -4,13 +4,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles/index.css">
-    <title>Document</title>
+    <title>Chess</title>
 </head>
 
 <body>
-    <div id="root">
+    <div class="app-container">
+        <div class="layout-container">
+            <h1 class="app-title">AV Chess Zero</h1>
+            <div id="root"></div>
 
+            <div class="sidebar">
+                <div class="sidebar-header">Match History</div>
+                <div id="move-history" class="move-history">
+
+                </div>
+                <div class="sidebar-footer">
+                    <button class="action-btn" onclick="location.reload()">Restart Game</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div id="game-over" class="game-over" style="display: none;">

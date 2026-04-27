@@ -48,17 +48,23 @@ function Pawn_Promotion(color, callback, id) {
   queen.src = `../Gallery/images/pieces/${color}/queen.png`;
 
   const imageContainer = document.createElement("div");
+  imageContainer.classList.add("promotion-images");
   imageContainer.appendChild(rook);
   imageContainer.appendChild(knight);
   imageContainer.appendChild(bishop);
   imageContainer.appendChild(queen);
 
   const msg = document.createElement("p");
-  msg.textContent = "Your Pawn has been promoted 🥳";
+  msg.textContent = "Choose Promotion Piece";
+  msg.classList.add("promotion-title");
+
+  const box = document.createElement("div");
+  box.classList.add("promotion-box");
+  box.appendChild(msg);
+  box.appendChild(imageContainer);
 
   const finalContainer = document.createElement("div");
-  finalContainer.appendChild(msg);
-  finalContainer.appendChild(imageContainer);
+  finalContainer.appendChild(box);
   finalContainer.classList.add("modal");
 
   const modal = new ModalCreator(finalContainer);
