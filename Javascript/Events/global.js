@@ -242,7 +242,7 @@ function moveElement(piece, id, castle) {
 
   const isCapture = !!keySquareMapper[id].piece;
   let pName = piece.piece_name.split("_")[1];
-  let sym = pName !== "Pawn" ? (pName === "Knight" ? "N" : pName[0]) : "";
+  let sym = pName !== "Pawn" ? (pName === "Knight" ? "N" : pName[0]) : (isCapture ? piece.current_position[0] : "");
   let moveStr = sym + (isCapture ? "x" : "") + id;
   if (castle) {
     moveStr = id.includes("g") ? "O-O" : "O-O-O";

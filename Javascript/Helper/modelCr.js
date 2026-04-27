@@ -33,19 +33,19 @@ function Pawn_Promotion(color, callback, id) {
   const rook = document.createElement("img");
   rook.onclick = rookCallback;
 
-  rook.src = `../Gallery/images/pieces/${color}/rook.png`;
+  rook.src = `../../Gallery/images/pieces/${color}/rook.png`;
 
   const knight = document.createElement("img");
   knight.onclick = knightCallback;
-  knight.src = `../Gallery/images/pieces/${color}/knight.png`;
+  knight.src = `../../Gallery/images/pieces/${color}/knight.png`;
 
   const bishop = document.createElement("img");
   bishop.onclick = bishopCallback;
-  bishop.src = `../Gallery/images/pieces/${color}/bishop.png`;
+  bishop.src = `../../Gallery/images/pieces/${color}/bishop.png`;
 
   const queen = document.createElement("img");
   queen.onclick = queenCallback;
-  queen.src = `../Gallery/images/pieces/${color}/queen.png`;
+  queen.src = `../../Gallery/images/pieces/${color}/queen.png`;
 
   const imageContainer = document.createElement("div");
   imageContainer.classList.add("promotion-images");
