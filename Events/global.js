@@ -118,10 +118,71 @@ function inTurnCapture(square){
   }
   return;
 }
+
+function checkForPawnPromotion(piece, id) {
+  if (currTurn === "white") {
+    if (
+      piece?.piece_name?.toLowerCase()?.includes("pawn") &&
+      id?.includes("8")
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  } else {
+    if (
+      piece?.piece_name?.toLowerCase()?.includes("pawn") &&
+      id?.includes("1")
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+}
+
+function callbackPawnPromotion(piece, id) {
+  const realPiece = piece(id);
+  const currentSquare = keySquareMapper[id];
+
+  piece.current_position = id;
+  currentSquare.piece = realPiece;
+
+  const image = document.createElement("img");
+  image.src = realPiece.img;
+  image.classList.add("piece");
+
+  const currentElement = document.getElementById(id);
+  currentElement.innerHTML = "";
+  currentElement.append(image);
+}
 // move element to square with id
-function moveElement(piece, id) {
-  
-  Pawn_Promotion("white");
+function moveElement(piece, id, castle) {
+  const pawnIsPromoted = checkForPawnPromotion(piece, id);
+
+  if (piece.piece_name.includes("King") || piece.piece_name.includes("Rook")) {
+    piece.move = true;
+
+    if (
+      piece.piece_name.includes("King") &&
+      piece.piece_name.includes("Black")
+    ) {
+      if (id === "c8" || id === "g8") {
+        let rook = keySquareMapper[id === "c8" ? "a8" : "h8"];
+        moveElement(rook.piece, id === "c8" ? "d8" : "f8", true);
+      }
+    }
+
+    if (
+      piece.piece_name.includes("King") &&
+      piece.piece_name.includes("White")
+    ) {
+      if (id === "c1" || id === "g1") {
+        let rook = keySquareMapper[id === "c1" ? "a1" : "h1"];
+        moveElement(rook.piece, id === "c1" ? "d1" : "f1", true);
+      }
+    }
+  }
 
   const flatData = globalState.flat();
   flatData.forEach((el) => {
@@ -129,28 +190,32 @@ function moveElement(piece, id) {
       delete el.piece;
     }
     if (el.id == id) {
-      if(el.piece){
-        el.piece.current_position=null;
+      if (el.piece) {
+        el.piece.current_position = null;
       }
-      el.piece=piece;
+      el.piece = piece;
     }
   });
   clearHighlight();
-
   const previousPiece = document.getElementById(piece.current_position);
-  piece.current_position=null;
+  piece.current_position = null;
 
   previousPiece?.classList?.remove("highlightYellow");
-
   const currentPiece = document.getElementById(id);
-  currentPiece.innerHTML = previousPiece?.innerHTML;
 
-  if(previousPiece) previousPiece.innerHTML = "";
+  currentPiece.innerHTML = previousPiece?.innerHTML;
+  if (previousPiece) previousPiece.innerHTML = "";
   piece.current_position = id;
 
+  if (pawnIsPromoted) {
+    Pawn_Promotion(currTurn, callbackPawnPromotion, id);
+  }
   King_Under_Attack();
-  flipTurn();
 
+  if (!castle) {
+    flipTurn();
+  }
+  
 }
 
 
@@ -306,6 +371,24 @@ function whiteKingClk(square) {
   const temp = [bottom, top, right, left, bottomLeft, topLeft, bottomRight, topRight];
   highlightSquareIds = result.flat();
 
+  // Add castling squares if king hasn't moved
+  if (!piece.move) {
+    const leftRook = keySquareMapper["a1"];
+    const rightRook = keySquareMapper["h1"];
+    
+    // Check queenside castling
+    if (leftRook && leftRook.piece && !leftRook.piece.move && 
+        !keySquareMapper["b1"].piece && !keySquareMapper["c1"].piece && !keySquareMapper["d1"].piece) {
+      highlightSquareIds.push("c1");
+    }
+    
+    // Check kingside castling
+    if (rightRook && rightRook.piece && !rightRook.piece.move && 
+        !keySquareMapper["f1"].piece && !keySquareMapper["g1"].piece) {
+      highlightSquareIds.push("g1");
+    }
+  }
+
   highlightSquareIds.forEach((highlight) => {
     const element = keySquareMapper[highlight];
     if (element) {
@@ -379,6 +462,24 @@ function blackKingClk(square) {
   
   const temp = [bottom, top, right, left, bottomLeft, topLeft, bottomRight, topRight];
   highlightSquareIds = result.flat();
+
+  // Add castling squares if king hasn't moved
+  if (!piece.move) {
+    const leftRook = keySquareMapper["a8"];
+    const rightRook = keySquareMapper["h8"];
+    
+    // Check queenside castling
+    if (leftRook && leftRook.piece && !leftRook.piece.move && 
+        !keySquareMapper["b8"].piece && !keySquareMapper["c8"].piece && !keySquareMapper["d8"].piece) {
+      highlightSquareIds.push("c8");
+    }
+    
+    // Check kingside castling
+    if (rightRook && rightRook.piece && !rightRook.piece.move && 
+        !keySquareMapper["f8"].piece && !keySquareMapper["g8"].piece) {
+      highlightSquareIds.push("g8");
+    }
+  }
 
   highlightSquareIds.forEach((highlight) => {
     const element = keySquareMapper[highlight];
