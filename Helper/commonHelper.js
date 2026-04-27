@@ -545,7 +545,7 @@ function giveKingCaptureIds(id, color){
   return result;
 }
 export {
-  checkPieceOfOpponentOnElement, checkSquareCaptureId,
+  checkPieceOfOpponentOnElement, checkPieceOfOpponentOnElementNoDom, checkSquareCaptureId,
   checkWhetherPieceExistsOrNot,giveBishopHighlightIds,
   RooksHlts,Knight_Hlts,Queen_Charge,King_Logic,
   giveKnightCaptureIds,giveBishopCaptureIds,

@@ -1,15 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles/index.css">
     <title>Document</title>
 </head>
+
 <body>
     <div id="root">
 
     </div>
-    <script type="module"src="index.js"></script>
+
+    <div id="game-over" class="game-over" style="display: none;">
+        <div class="game-over-box">
+            <h1 id="game-over-message">White Wins</h1>
+            <button id="restart-btn" onclick="location.reload()">Play Again</button>
+        </div>
+    </div>
+
+    <script type="module" src="index.js"></script>
 </body>
+
 </html>
