@@ -20,4 +20,16 @@ String.prototype.replaceAt = function (index, replacement) {
   );
 };
 
+const socket = io('http://localhost:3000');
+socket.on('connect', () => {
+  console.log('Socket connected:', socket.id);
+});
+socket.on('total_players_count_change', function(totalPlayerCnt){
+  const playerCountEl = document.getElementById('total-players');
+  if (playerCountEl) {
+    playerCountEl.textContent = 'Total Players: ' + totalPlayerCnt;
+  }
+  console.log('Player count updated:', totalPlayerCnt);
+});
+
 export { globalState, keySquareMapper };

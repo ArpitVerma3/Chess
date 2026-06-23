@@ -393,7 +393,7 @@ function whiteKnightClk(square) {
 
   highlightSquareIds.forEach((highlight) => {
     const element = keySquareMapper[highlight];
-    if (element) {
+    if (element && !element.piece) {
       element.highlight = true;
     }
   });
@@ -450,7 +450,7 @@ function blackKnightClk(square) {
 
   highlightSquareIds.forEach((highlight) => {
     const element = keySquareMapper[highlight];
-    if (element) {
+    if (element && !element.piece) {
       element.highlight = true;
     }
   });

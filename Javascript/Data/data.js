@@ -8,7 +8,6 @@ function sqrRow(rowId){
     const Cols=["a","b","c","d","e","f","g","h"];
 
     if(rowId % 2==0){
-    
         Cols.forEach((element,index)=>{
             if(index % 2==0){
                 Rows.push(square("white",element+rowId,null));
