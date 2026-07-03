@@ -1,6 +1,7 @@
 import { initGame } from "./Data/data.js";
 import { GlobalEvent } from "./Events/global.js";
 import { initGameRender } from "./Render/main.js";
+import "./Helper/addCloak.js";
 
 const globalState = initGame();
 let keySquareMapper = {};
