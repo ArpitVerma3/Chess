@@ -17,28 +17,48 @@
   </head>
 
   <body>
-    <div id="total-players" class="player-count">Total Players: 0</div>
     <div class="app-container">
-      <div class="layout-container">
-        <h1 class="app-title">AV Chess Zero</h1>
-        <div id="root"></div>
+      <h1 class="app-title">AV Chess Zero</h1>
 
-        <div id="clock1"></div>
-        <select name="mode" id="gameMode">
-          <option value="Bullet">Bullet (1 min)</option>
-          <option value="Blitz">Blitz (3 min)</option>
-          <option value="Rapid">Rapid (10 min)</option>
-        </select>
-        <div id="clock2"></div>
+      <div class="game-layout">
+        <div class="left-panel">
+          <div id="total-players" class="player-count">Total Players: 0</div>
 
-        <div class="sidebar">
+          <div id="clock2" class="clock inactive">
+            <span class="clock-label"
+              ><span class="color-dot black-dot"></span> Black</span
+            >
+            <span class="clock-time">03:00</span>
+          </div>
+
+          <div id="clock1" class="clock inactive">
+            <span class="clock-label"
+              ><span class="color-dot white-dot"></span> White</span
+            >
+            <span class="clock-time">03:00</span>
+          </div>
+
+          <div class="divider"></div>
+
+          <select name="mode" id="gameMode" aria-label="Game mode">
+            <option value="Bullet">Bullet (1 min)</option>
+            <option value="Blitz">Blitz (3 min)</option>
+            <option value="Rapid">Rapid (10 min)</option>
+          </select>
+
+          <button id="start-btn" class="action-btn">Start Game</button>
+          <button id="sidebar-restart-btn" class="action-btn secondary">
+            Restart Game
+          </button>
+        </div>
+
+        <div class="board-wrapper">
+          <div id="root"></div>
+        </div>
+
+        <div class="right-panel">
           <div class="sidebar-header">Match History</div>
           <div id="move-history" class="move-history"></div>
-          <div class="sidebar-footer">
-            <button class="action-btn" onclick="location.reload()">
-              Restart Game
-            </button>
-          </div>
         </div>
       </div>
     </div>
