@@ -13,18 +13,33 @@ const io = new Server(httpServer, {
 
 let totalPlayers = 0;
 let players = {};
-
+let waiting = {
+  1:[],
+  3:[],
+  10:[],
+}
 function onDisconnect(socket) {
   totalPlayers--;
   firePlayers();
 }
+
+function handlePlayRequest(socket, time){
+  if(!waiting[time].includes(socket.id)){
+    waiting[time].push(socket.id);
+  }
+}
+
 function firePlayers() {
   io.emit("total_players_count_change", totalPlayers);
 }
 function fireOnConnected() {
+  socket.on("want_to_play", function(timer){
+    handlePlayRequest(socket, timer);
+  });
   totalPlayers++;
   firePlayers();
 }
+
 io.on("connection", (socket) => {
   players[socket.id] = socket;
   totalPlayers++;

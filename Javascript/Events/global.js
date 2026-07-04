@@ -24,6 +24,14 @@ let currTurn = "white";
 let moveState = null;
 let moveHistory = [];
 
+export function resetGameRuntimeState() {
+  highlight_state = false;
+  selfHighlightState = null;
+  currTurn = "white";
+  moveState = null;
+  moveHistory.length = 0;
+}
+
 function clearHighlightLocal() {
   clearHighlight();
   highlight_state = false;

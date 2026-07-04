@@ -1,7 +1,14 @@
+import { initGame } from "../Data/data.js";
+import { ROOT_DIV } from "./constants.js";
+import { initGameRender, globalPiece } from "../Render/main.js";
+import { globalState, keySquareMapper } from "../index.js";
+import { resetGameRuntimeState } from "../Events/global.js";
+
 const times = {
   Bullet: { time: 60 },
   Blitz: { time: 60 * 3 },
   Rapid: { time: 60 * 10 },
+  Classic: {time: 60 * 30},
 };
 
 class ChessClock {
@@ -95,6 +102,8 @@ function showGameOverPopup(message) {
     overlay.style.display = 'flex';
   }
   isGameRunning = false;
+  setIdleState();
+  refreshClockUI();
 }
 
 clock.onTimeout = (loser) => {
@@ -104,13 +113,40 @@ clock.onTimeout = (loser) => {
 
 const modeSelect = document.getElementById('gameMode');
 const startButton = document.getElementById('start-btn');
-const restartButton = document.getElementById('sidebar-restart-btn');
 const whiteClockEl = document.getElementById('clock1');
 const blackClockEl = document.getElementById('clock2');
 let isGameRunning = false;
 
 export function isGameStarted() {
   return isGameRunning;
+}
+
+function resetBoardAndGame() {
+  const boardRoot = document.getElementById("root") || ROOT_DIV;
+  if (boardRoot) {
+    boardRoot.innerHTML = "";
+  }
+
+  Object.keys(globalPiece).forEach((key) => delete globalPiece[key]);
+
+  globalState.splice(0, globalState.length, ...initGame());
+
+  Object.keys(keySquareMapper).forEach((key) => delete keySquareMapper[key]);
+  globalState.flat().forEach((square) => {
+    keySquareMapper[square.id] = square;
+  });
+
+  initGameRender(globalState);
+
+  const moveHistoryEl = document.getElementById("move-history");
+  if (moveHistoryEl) {
+    moveHistoryEl.innerHTML = "";
+  }
+
+  resetGameRuntimeState();
+  const selectedMode = modeSelect?.value || "Blitz";
+  clock.reset(selectedMode);
+  refreshClockUI();
 }
 
 function refreshClockUI() {
@@ -142,6 +178,7 @@ function setIdleState() {
   }
   if (startButton) {
     startButton.disabled = false;
+    startButton.classList.remove('started');
     startButton.textContent = 'Start Game';
   }
   isGameRunning = false;
@@ -155,13 +192,21 @@ function setRunningState() {
     modeSelect.style.pointerEvents = 'none';
   }
   if (startButton) {
-    startButton.disabled = true;
-    startButton.textContent = 'Game Started';
+    startButton.disabled = false;
+    startButton.classList.add('started');
+    startButton.textContent = 'Restart Game';
   }
   isGameRunning = true;
 }
 
-function handleStart() {
+function handleStartOrRestart() {
+  if (isGameRunning) {
+    resetBoardAndGame();
+    setIdleState();
+    refreshClockUI();
+    return;
+  }
+
   if (modeSelect) {
     modeSelect.disabled = true;
     modeSelect.setAttribute('disabled', 'disabled');
@@ -169,17 +214,9 @@ function handleStart() {
     modeSelect.style.pointerEvents = 'none';
   }
 
-  const selectedMode = modeSelect?.value || 'Blitz';
-  clock.reset(selectedMode);
+  resetBoardAndGame();
   clock.start('w');
   setRunningState();
-  refreshClockUI();
-}
-
-function handleReset() {
-  const selectedMode = modeSelect?.value || 'Blitz';
-  clock.reset(selectedMode);
-  setIdleState();
   refreshClockUI();
 }
 
@@ -196,11 +233,7 @@ if (modeSelect) {
 }
 
 if (startButton) {
-  startButton.addEventListener('click', handleStart);
-}
-
-if (restartButton) {
-  restartButton.addEventListener('click', () => location.reload());
+  startButton.addEventListener('click', handleStartOrRestart);
 }
 
 export function switchClock() {

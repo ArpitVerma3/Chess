@@ -21,17 +21,21 @@ String.prototype.replaceAt = function (index, replacement) {
   );
 };
 
-const socket = io('http://localhost:3000');
-socket.on('connect', () => {
-  console.log('Socket connected:', socket.id);
+function handleBtnClk(event) {
+  const timer = Number(event.target.getAttribute("data-time"));
+  socket.emit("want_to_play", timer);
+}
+const socket = io("http://localhost:3000");
+socket.on("connect", () => {
+  console.log("Socket connected:", socket.id);
 });
 
-socket.on('total_players_count_change', function(totalPlayerCnt){
-  const playerCountEl = document.getElementById('total-players');
+socket.on("total_players_count_change", function (totalPlayerCnt) {
+  const playerCountEl = document.getElementById("total-players");
   if (playerCountEl) {
-    playerCountEl.textContent = 'Total Players: ' + totalPlayerCnt;
+    playerCountEl.textContent = "Total Players: " + totalPlayerCnt;
   }
-  console.log('Player count updated:', totalPlayerCnt);
+  console.log("Player count updated:", totalPlayerCnt);
 });
 
 export { globalState, keySquareMapper };
