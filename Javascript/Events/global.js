@@ -15,6 +15,7 @@ import { giveRookCapturesIds, giveBishopCaptureIds } from "../Helper/commonHelpe
 import { globalPiece } from "../Render/main.js";
 
 import Pawn_Promotion from "../Helper/modelCr.js"
+import { switchClock, isGameStarted } from "../Helper/addCloak.js";
 
 let highlight_state = false;
 let selfHighlightState = null;
@@ -36,6 +37,7 @@ function movePieceFromXToY(from, to) {
 
 function flipTurn() {
   currTurn = currTurn === "white" ? "black" : "white";
+  switchClock();
 }
 
 function isPlayerInCheck(color) {
@@ -1375,6 +1377,12 @@ function blackRookClk(square) {
 
 function GlobalEvent() {
   ROOT_DIV.addEventListener("click", function (event) {
+    if (!isGameStarted()) {
+      return;
+    }
+    if (!isGameStarted()) {
+      return;
+    }
     if (event.target.localName === "img") {
       const clickId = event.target.parentNode.id;
       const square = keySquareMapper[clickId];
