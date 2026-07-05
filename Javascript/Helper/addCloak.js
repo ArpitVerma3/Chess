@@ -158,12 +158,12 @@ function refreshClockUI() {
   blackClockEl.classList.toggle('active', active === 'b');
   blackClockEl.classList.toggle('inactive', active !== 'b');
 
-  whiteClockEl.classList.toggle('danger', active === 'w' && clock.times.w < 10);
-  blackClockEl.classList.toggle('danger', active === 'b' && clock.times.b < 10);
+  whiteClockEl.classList.remove('danger');
+  blackClockEl.classList.remove('danger');
 
   if (!active) {
-    whiteClockEl.classList.remove('active', 'danger');
-    blackClockEl.classList.remove('active', 'danger');
+    whiteClockEl.classList.remove('active');
+    blackClockEl.classList.remove('active');
     whiteClockEl.classList.add('inactive');
     blackClockEl.classList.add('inactive');
   }

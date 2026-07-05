@@ -166,17 +166,6 @@ body {
   color: #888;
 }
 
-.clock.danger {
-  background-color: #c0392b;
-  color: #fff;
-  animation: pulse 0.5s infinite alternate;
-}
-
-@keyframes pulse {
-  from { opacity: 1; }
-  to   { opacity: 0.6; }
-}
-
 .left-panel select,
 .left-panel .action-btn {
   width: 100%;
