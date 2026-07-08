@@ -60,7 +60,14 @@ body {
   justify-content: center;
   align-items: center;
 }
-
+.waitt{
+  display: none;
+}
+#waitingJoin{
+  width: 80vw;
+  align-items: center;
+  font-size: 50px;
+}
 #root {
   display: flex;
   flex-direction: column;
@@ -100,7 +107,7 @@ body {
 
 #start-btn:hover {
   filter: brightness(1.12);
-  transform: translateY(-2px);
+  transform: translateY(-1px);
 }
 .right-panel {
   width: 100%;
@@ -156,9 +163,9 @@ body {
 }
 
 .clock.active {
-  background-color: #f5a623;
-  color: #000;
-  box-shadow: 0 0 12px rgba(245, 166, 35, 0.6);
+  background-color: #d9a43a;
+  color: #1a1408;
+  box-shadow: 0 0 10px rgba(217, 164, 58, 0.35);
 }
 
 .clock.inactive {

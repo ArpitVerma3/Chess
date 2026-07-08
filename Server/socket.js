@@ -27,6 +27,10 @@ let matches = {
   30: [],
 };
 
+function initSetupMatch({ opponentId, socketId }) {
+  players[opponentId].emit("match_made", "w");
+  players[socketId].emit("match_made", "b");
+}
 function onDisconnect(socket) {
   removeSkt(socket.id);
   totalPlayers--;
@@ -43,11 +47,15 @@ function removeSkt(socket) {
   });
 }
 function handlePlayRequest(socket, time) {
-  if (waiting[time].includes(socket.id)>0) {
+  if (waiting[time].includes(socket.id) > 0) {
     waiting[time].splice(0, 1);
+    matches[time].push({
+      [opponentId]: socket.id,
+    });
+    initSetupMatch(opponentId, socket.id);
     return;
   }
-  if(!waiting[time].includes(socket.id)){
+  if (!waiting[time].includes(socket.id)) {
     waiting[time].push(socket.id);
   }
 }
@@ -72,3 +80,6 @@ io.on("connection", (socket) => {
 });
 
 httpServer.listen(PORT);
+socket.on("match_made", (color) =>{
+  alert("You are playing as" + color);
+})

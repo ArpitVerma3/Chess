@@ -24,6 +24,8 @@ String.prototype.replaceAt = function (index, replacement) {
 function handleBtnClk(event) {
   const timer = Number(event.target.getAttribute("data-time"));
   socket.emit("want_to_play", timer);
+  $(`waitingJoin`).hide();
+  $(`waitingJoin`).show();
 }
 const socket = io("http://localhost:3000");
 socket.on("connect", () => {
