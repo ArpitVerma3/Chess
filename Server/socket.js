@@ -1,12 +1,12 @@
 const { createServer } = require("http");
 const { Server } = require("socket.io");
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 const httpServer = createServer();
 
 const io = new Server(httpServer, {
   cors: {
-    origin: ["http://127.0.0.1:5500", "http://localhost:5500", "https://av-chess-zero.vercel.app/"],
+    origin: ["http://127.0.0.1:5500", "http://localhost:5500", "https://av-chess-zero.vercel.app"],
     methods: ["GET", "POST"],
     credentials: true,
   },
