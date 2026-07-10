@@ -11,6 +11,13 @@ const times = {
   Classic: {time: 60 * 30},
 };
 
+const minutesToMode = {
+  1: "Bullet",
+  3: "Blitz",
+  10: "Rapid",
+  30: "Classic",
+};
+
 class ChessClock {
   constructor(mode = 'Blitz') {
     const control = times[mode] || times.Blitz;
@@ -113,6 +120,7 @@ clock.onTimeout = (loser) => {
 
 const modeSelect = document.getElementById('gameMode');
 const startButton = document.getElementById('start-btn');
+const offlineButton = document.getElementById('offline-btn');
 const whiteClockEl = document.getElementById('clock1');
 const blackClockEl = document.getElementById('clock2');
 let isGameRunning = false;
@@ -179,7 +187,12 @@ function setIdleState() {
   if (startButton) {
     startButton.disabled = false;
     startButton.classList.remove('started');
-    startButton.textContent = 'Start Game';
+    startButton.textContent = 'Play Online';
+  }
+  if (offlineButton) {
+    offlineButton.disabled = false;
+    offlineButton.classList.remove('disabled');
+    offlineButton.style.pointerEvents = '';
   }
   isGameRunning = false;
 }
@@ -194,18 +207,58 @@ function setRunningState() {
   if (startButton) {
     startButton.disabled = false;
     startButton.classList.add('started');
-    startButton.textContent = 'Restart Game';
+    startButton.textContent = 'Resign';
+  }
+  if (offlineButton) {
+    offlineButton.disabled = true;
+    offlineButton.classList.add('disabled');
+    offlineButton.style.pointerEvents = 'none';
   }
   isGameRunning = true;
 }
 
+let onStartRequest = null;
+export function setStartRequestHandler(fn) {
+  onStartRequest = fn;
+}
+
+let onResignRequest = null;
+export function setResignHandler(fn) {
+  onResignRequest = fn;
+}
+
 function handleStartOrRestart() {
   if (isGameRunning) {
+    if (onResignRequest) {
+      onResignRequest();
+    }
     resetBoardAndGame();
     setIdleState();
+    setSearching(false);
     refreshClockUI();
     return;
   }
+
+  // Online mode: hand off to the matchmaking layer and wait for match_made.
+  if (onStartRequest) {
+    const mode = modeSelect?.value || "Blitz";
+    const handled = onStartRequest(mode);
+    if (handled) {
+      setSearching(true);
+      return;
+    }
+  }
+
+  startLocalGame();
+}
+
+function startLocalGame() {
+  if (isGameRunning && onResignRequest) {
+    // Tell the online layer we're leaving any in-progress match.
+    onResignRequest();
+  }
+
+  setSearching(false);
 
   if (modeSelect) {
     modeSelect.disabled = true;
@@ -215,6 +268,7 @@ function handleStartOrRestart() {
   }
 
   resetBoardAndGame();
+  orientBoard('w');
   clock.start('w');
   setRunningState();
   refreshClockUI();
@@ -234,6 +288,41 @@ if (modeSelect) {
 
 if (startButton) {
   startButton.addEventListener('click', handleStartOrRestart);
+}
+
+if (offlineButton) {
+  offlineButton.addEventListener('click', startLocalGame);
+}
+
+function orientBoard(color) {
+  const boardRoot = document.getElementById("root") || ROOT_DIV;
+  if (!boardRoot) return;
+  boardRoot.classList.toggle("flipped", color === "b");
+}
+
+export function setSearching(isSearching) {
+  const overlayEl = document.getElementById("main-element");
+  const waitingEl = document.getElementById("waitingJoin");
+  if (overlayEl) {
+    overlayEl.classList.toggle("search-active", isSearching);
+  }
+  if (waitingEl) {
+    waitingEl.classList.toggle("search-visible", isSearching);
+  }
+}
+
+export function beginOnlineGame({ color, mode }) {
+  setSearching(false);
+
+  if (modeSelect && minutesToMode[mode]) {
+    modeSelect.value = minutesToMode[mode];
+  }
+
+  resetBoardAndGame();
+  orientBoard(color);
+  clock.start('w');
+  setRunningState();
+  refreshClockUI();
 }
 
 export function switchClock() {
