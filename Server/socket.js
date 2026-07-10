@@ -2,7 +2,10 @@ const { createServer } = require("http");
 const { Server } = require("socket.io");
 
 const PORT = process.env.PORT || 3000;
-const httpServer = createServer();
+const httpServer = createServer((req, res) => {
+  res.writeHead(200, { "Content-Type": "text/plain" });
+  res.end("Chess Socket Server Running");
+});
 
 const io = new Server(httpServer, {
   cors: {
