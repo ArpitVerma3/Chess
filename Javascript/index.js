@@ -33,7 +33,7 @@ const MODE_TO_MINUTES = {
   Classic: 30,
 };
 
-const socket = io("http://localhost:3000");
+const socket = io("https://av-chess-zero.onrender.com");
 
 socket.on("connect", () => {
   console.log("Socket connected:", socket.id);
