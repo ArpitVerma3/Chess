@@ -1,85 +1,111 @@
 const { createServer } = require("http");
 const { Server } = require("socket.io");
+
 const PORT = 3000;
 const httpServer = createServer();
 
 const io = new Server(httpServer, {
   cors: {
     origin: ["http://127.0.0.1:5500", "http://localhost:5500"],
-    allowedHeaders: ["GET", "POST"],
+    methods: ["GET", "POST"],
     credentials: true,
   },
 });
 
+const TIMES = [1, 3, 10, 30];
 let totalPlayers = 0;
-let players = {};
-let waiting = {
-  1: [],
-  3: [],
-  10: [],
-  30: [],
+
+const games = {};
+const waiting = {
+  1: null,
+  3: null,
+  10: null,
+  30: null,
 };
 
-let matches = {
-  1: [],
-  3: [],
-  10: [],
-  30: [],
-};
-
-function initSetupMatch({ opponentId, socketId }) {
-  players[opponentId].emit("match_made", "w");
-  players[socketId].emit("match_made", "b");
-}
-function onDisconnect(socket) {
-  removeSkt(socket.id);
-  totalPlayers--;
-  firePlayers();
+function broadcastPlayerCount() {
+  io.emit("total_players_count_change", totalPlayers);
 }
 
-function removeSkt(socket) {
-  const forEach = [1, 3, 10, 30];
-  array.forEach((element) => {
-    const idx = waiting[element].indexOf(socket.id);
-    if (idx > -1) {
-      waiting[element].splice(idx, 1);
+function removeFromQueues(socketId) {
+  TIMES.forEach((time) => {
+    if (waiting[time] === socketId) {
+      waiting[time] = null;
     }
   });
 }
-function handlePlayRequest(socket, time) {
-  if (waiting[time].includes(socket.id) > 0) {
-    waiting[time].splice(0, 1);
-    matches[time].push({
-      [opponentId]: socket.id,
-    });
-    initSetupMatch(opponentId, socket.id);
-    return;
-  }
-  if (!waiting[time].includes(socket.id)) {
-    waiting[time].push(socket.id);
-  }
+
+function makeMatch(socketId, opponentId, time) {
+  const roomId = `${opponentId}#${socketId}`;
+  io.sockets.sockets.get(opponentId)?.join(roomId);
+  io.sockets.sockets.get(socketId)?.join(roomId);
+
+  games[opponentId] = { opponentId: socketId, roomId, color: "w", time };
+  games[socketId] = { opponentId, roomId, color: "b", time };
+
+  io.to(opponentId).emit("match_made", { color: "w", time });
+  io.to(socketId).emit("match_made", { color: "b", time });
 }
 
-function firePlayers() {
-  io.emit("total_players_count_change", totalPlayers);
+function handlePlayRequest(socket, time) {
+  time = Number(time);
+  if (!TIMES.includes(time)) return;
+
+  // Already in a game — ignore duplicate requests.
+  if (games[socket.id]) return;
+  removeFromQueues(socket.id);
+
+  const opponentId = waiting[time];
+
+  if (
+    opponentId &&
+    opponentId !== socket.id &&
+    io.sockets.sockets.get(opponentId)
+  ) {
+    waiting[time] = null;
+    makeMatch(socket.id, opponentId, time);
+    return;
+  }
+  waiting[time] = socket.id;
 }
-function fireOnConnected() {
-  socket.on("want_to_play", function (timer) {
-    handlePlayRequest(socket, timer);
-  });
-  totalPlayers++;
-  firePlayers();
+
+function handleMove(socket, payload) {
+  const game = games[socket.id];
+  if (!game) return;
+  socket.to(game.roomId).emit("opponent_move", payload);
+}
+
+function endGame(socketId, reason) {
+  const game = games[socketId];
+  if (!game) return;
+
+  const { opponentId, roomId } = game;
+  io.to(opponentId).emit("opponent_left", { reason });
+
+  delete games[socketId];
+  delete games[opponentId];
+
+  io.sockets.sockets.get(opponentId)?.leave(roomId);
+  io.sockets.sockets.get(socketId)?.leave(roomId);
+}
+
+function onDisconnect(socket) {
+  removeFromQueues(socket.id);
+  endGame(socket.id, "disconnect");
+  totalPlayers = Math.max(0, totalPlayers - 1);
+  broadcastPlayerCount();
 }
 
 io.on("connection", (socket) => {
-  players[socket.id] = socket;
   totalPlayers++;
-  fireOnConnected(socket);
+  broadcastPlayerCount();
 
+  socket.on("want_to_play", (time) => handlePlayRequest(socket, time));
+  socket.on("move", (payload) => handleMove(socket, payload));
+  socket.on("resign", () => endGame(socket.id, "resign"));
   socket.on("disconnect", () => onDisconnect(socket));
 });
 
-httpServer.listen(PORT);
-socket.on("match_made", (color) =>{
-  alert("You are playing as" + color);
-})
+httpServer.listen(PORT, () => {
+  console.log(`Chess socket server listening on :${PORT}`);
+});

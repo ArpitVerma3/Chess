@@ -60,14 +60,41 @@ body {
   justify-content: center;
   align-items: center;
 }
-.waitt{
+.display-No {
   display: none;
 }
-#waitingJoin{
-  width: 80vw;
-  align-items: center;
-  font-size: 50px;
+
+.waitt {
+  display: none;
 }
+#main-element.search-active {
+  position: fixed;
+  inset: 0;
+  z-index: 1500;
+  display: block;
+  background: rgba(8, 8, 12, 0.4);      
+  backdrop-filter: blur(28px);           
+  -webkit-backdrop-filter: blur(28px);
+  animation: fadeIn 0.3s ease-in-out;
+}
+#waitingJoin.search-visible {
+  display: block;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1600;
+  margin: 0;
+  text-align: center;
+  font-size: 50px;
+  font-weight: 700;
+  color: #f0b429;
+  text-shadow: 0 0 20px rgba(240, 180, 41, 0.5),
+               0 4px 12px rgba(0, 0, 0, 0.6);
+  letter-spacing: 2px;
+  animation: pulse 1.5s infinite;
+}
+
 #root {
   display: flex;
   flex-direction: column;
@@ -108,6 +135,30 @@ body {
 #start-btn:hover {
   filter: brightness(1.12);
   transform: translateY(-1px);
+}
+
+#offline-btn {
+  background: linear-gradient(135deg, #1565c0, #0d47a1);
+  box-shadow: 0 4px 14px rgba(21, 101, 192, 0.35);
+}
+
+#offline-btn:hover {
+  filter: brightness(1.12);
+  transform: translateY(-1px);
+}
+
+#offline-btn:disabled,
+#offline-btn.disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  filter: grayscale(0.4);
+  transform: none;
+}
+
+#offline-btn:disabled:hover,
+#offline-btn.disabled:hover {
+  filter: grayscale(0.4);
+  transform: none;
 }
 .right-panel {
   width: 100%;
@@ -220,6 +271,16 @@ body {
 }
 .squareRow {
   display: flex;
+}
+
+/* Black's perspective: reverse rank order and file order within each rank.
+   Pieces stay upright since only the flex layout is mirrored. */
+#root.flipped {
+  flex-direction: column-reverse;
+}
+
+#root.flipped .squareRow {
+  flex-direction: row-reverse;
 }
 
 .square {

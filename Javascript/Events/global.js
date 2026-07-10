@@ -17,12 +17,48 @@ import { globalPiece } from "../Render/main.js";
 import Pawn_Promotion from "../Helper/modelCr.js"
 import { switchClock, isGameStarted } from "../Helper/addCloak.js";
 
+import {
+  whiteQueen, whiteRook, whiteBishop, whiteKnight,
+  blackQueen, blackRook, blackBishop, blackKnight,
+} from "../Data/pieces.js";
+
 let highlight_state = false;
 let selfHighlightState = null;
 
 let currTurn = "white";
 let moveState = null;
 let moveHistory = [];
+
+let myColor = null;
+let emitMove = null;
+
+export function setMoveEmitter(fn) {
+  emitMove = fn;
+}
+
+export function setMyColor(color) {
+  myColor = color;
+}
+
+function promotionFactory(color, choice) {
+  const map = {
+    white: { Queen: whiteQueen, Rook: whiteRook, Bishop: whiteBishop, Knight: whiteKnight },
+    black: { Queen: blackQueen, Rook: blackRook, Bishop: blackBishop, Knight: blackKnight },
+  };
+  const byColor = map[color] || map.white;
+  return byColor[choice] || byColor.Queen;
+}
+
+function applyRemoteMove({ from, to, promotion }) {
+  const square = keySquareMapper[from];
+  if (!square || !square.piece) return;
+  const piece = square.piece;
+
+  clearPreviousSelfHighlight(selfHighlightState);
+  clearHighlightLocal();
+
+  moveElement(piece, to, false, true, promotion);
+}
 
 export function resetGameRuntimeState() {
   highlight_state = false;
@@ -239,8 +275,11 @@ function callbackPawnPromotion(pieceFn, id) {
   currentElement.innerHTML = "";
   currentElement.append(image);
 }
-// move element to square with id
-function moveElement(piece, id, castle) {
+// move element to square with id.
+// isRemote = move came from the opponent over the network (do not re-emit).
+// promotion = chosen promotion piece name ("Queen"/"Rook"/"Bishop"/"Knight"),
+//   supplied for remote promotion moves so we can skip the local chooser modal.
+function moveElement(piece, id, castle, isRemote = false, promotion = null) {
 
   if (!isKingInCheckAfterMove(piece, piece.current_position, id)) {
 
@@ -249,6 +288,9 @@ function moveElement(piece, id, castle) {
     clearHighlightLocal();
     return;
   }
+
+  // Capture the origin square before it gets cleared, so we can relay it.
+  const fromId = piece.current_position;
 
   const isCapture = !!keySquareMapper[id].piece;
   let pName = piece.piece_name.split("_")[1];
@@ -309,18 +351,42 @@ function moveElement(piece, id, castle) {
   piece.current_position = id;
 
   if (pawnIsPromoted) {
-    Pawn_Promotion(currTurn, (pieceFn, promoteId) => {
-      callbackPawnPromotion(pieceFn, promoteId);
+    const promotingColor = currTurn;
+
+    // Finalize a promotion once the piece is known (chosen locally or
+    // received from the opponent). `choice` is the piece name.
+    const finishPromotion = (pieceFn, choice) => {
+      callbackPawnPromotion(pieceFn, id);
       if (!castle) {
+        // Relay the promotion move to the opponent (local moves only).
+        if (!isRemote && myColor && emitMove) {
+          emitMove({ from: fromId, to: id, promotion: choice });
+        }
         flipTurn();
         checkGameEnd();
       }
       renderMoveHistory();
-    }, id);
+    };
+
+    if (isRemote) {
+      // Opponent already chose — apply directly, no modal.
+      const choice = promotion || "Queen";
+      finishPromotion(promotionFactory(promotingColor, choice), choice);
+    } else {
+      Pawn_Promotion(promotingColor, (pieceFn, promoteId) => {
+        // pieceFn.name is like "whiteQueen"; strip the color to get "Queen".
+        const choice = pieceFn.name.replace(/^(white|black)/, "");
+        finishPromotion(pieceFn, choice);
+      }, id);
+    }
     return;
   }
 
   if (!castle) {
+    // Relay a normal (non-castle, non-promotion) move to the opponent.
+    if (!isRemote && myColor && emitMove) {
+      emitMove({ from: fromId, to: id });
+    }
     flipTurn();
     checkGameEnd();
   }
@@ -1388,7 +1454,9 @@ function GlobalEvent() {
     if (!isGameStarted()) {
       return;
     }
-    if (!isGameStarted()) {
+    // In online play you may only act on your turn. myColor is null for
+    // local hot-seat play, which leaves both sides freely clickable.
+    if (myColor && currTurn !== myColor) {
       return;
     }
     if (event.target.localName === "img") {
@@ -1465,4 +1533,4 @@ function GlobalEvent() {
   });
 }
 
-export { GlobalEvent, movePieceFromXToY };
+export { GlobalEvent, movePieceFromXToY, applyRemoteMove };
